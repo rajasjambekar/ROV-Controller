@@ -23,7 +23,7 @@ public class JoystickContainer {
 	private ArrayList<Component> buttonComponentList = null, axesComponentList = null, hatSwitchComponentList = null;
 	private ArrayList<Task> taskList = null;
 	//toggle button is used for modifying the normal useage of axes values for specialized task
-	//In maneuvering, when toggle button is pressed, the rov will move left/right
+	//In maneuvering, when toggle button is pressed, the rov will rotate clkwise/counte clkwise
 	//depending on the position of joystick
 	//i.e. value of this button read from (toggleButtonNumber - 1) position of array
 	int toggleButtonNumber = 2; 
@@ -41,6 +41,7 @@ public class JoystickContainer {
 		hatSwitchComponentList = new ArrayList<Component>();
 		taskList = new ArrayList<Task>();
 		setComponentList();
+		addTask(new Task("Maneuver",0,0));
 	}
 	
 	//reads data from all axes of this joystick
@@ -181,7 +182,7 @@ public class JoystickContainer {
 		if(axisValueInPercentage<=10)
 			axisValueInPercentage = 0;
 		//thruster stopping boundary
-		else if((axisValueInPercentage<=50 && axisValueInPercentage>=40) || ((axisValueInPercentage>=50 && axisValueInPercentage<=60)))
+		else if((axisValueInPercentage<=50 && axisValueInPercentage>=45) || ((axisValueInPercentage>=50 && axisValueInPercentage<=55)))
 			axisValueInPercentage = 50;
 		//thruster forward boundary
 		else if(axisValueInPercentage>=90)

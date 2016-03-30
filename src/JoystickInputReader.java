@@ -21,8 +21,9 @@ public class JoystickInputReader implements Runnable {
 	
 	private void checkTasks() {
 		//check if this joystick controls maneuvering
-		if(jContainer.getTaskList().contains("Maneuver")) {
-			//Runnable mJ = new ManeuveringJoystick();
+		if(jContainer.containsTask("Maneuver")) {
+			Runnable mJ = new ManeuveringJoystick(jContainer);
+			new Thread(mJ).start();
 		}
 		//check if this joystick controls robotic arm
 		else if(jContainer.getTaskList().contains("RoboticArm")) {
@@ -37,8 +38,7 @@ public class JoystickInputReader implements Runnable {
 			//read raw data from controller
 			jContainer.readAxes();
 			jContainer.readButtons();
-			jContainer.dispValues();
-			sleep(1000);
+			//jContainer.dispValues();
 		}
 	}
 
