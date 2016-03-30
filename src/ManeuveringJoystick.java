@@ -36,10 +36,11 @@ public class ManeuveringJoystick implements Runnable{
 		float axesValPercent[] = new float[jC.getAxisCount()];
 		jC.getAxesData(axesValPercent);
 		boolean toggleButtonState = jC.getToggleButtonState();
+		stopThrusters();	//re init thruster values to stop val for safety
 		if(!toggleButtonState) {
 			//toggle button not pressed
 			//normal maneuvering calculations
-			calThrusterVal(axesValPercent);
+			calThrusterValNormal(axesValPercent);
 		}
 		else {
 			//toggle button pressed
@@ -49,10 +50,12 @@ public class ManeuveringJoystick implements Runnable{
 	
 	//convert raw axes values to thruster values
 	//thrusters only work with integer values
-	private void calThrusterVal(float[] axesValPercent) {
-		stopThrusters();	//re init thruster values to stop val for safety
-		
-		
+	//horizonal movement thrusters are in last positions of array and do not work in normal mode 
+	private void calThrusterValNormal(float[] axesValPercent) {
+		int thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
+		for(int i=0;i<thrusterVal.length-2 && i<axesValPercent.length-2;i++) {
+			thrusterVal[i] = (int) ((axesValPercent[i]/100)*(thrusterValRange)) + THRUSTER_FULL_BW;
+		}
 	}
 
 	//get thruster values
