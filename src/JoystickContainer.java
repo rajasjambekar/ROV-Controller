@@ -9,6 +9,8 @@ import net.java.games.input.Component.Identifier;
  * Container class for joystick data
  */
 public class JoystickContainer {
+	float joystickMaxVal = 1;
+	float joystickMinVal = -1;
 	private int axesCount = 0;
 	private int buttonCount = 0;
 	private int hatSwitchCount = 0;
@@ -168,9 +170,9 @@ public class JoystickContainer {
 	}
 	
 	//returns number of hat switch present in this joystick
-		public int getHatSwitchCount() {
-			return hatSwitchCount;
-		}
+	public int getHatSwitchCount() {
+		return hatSwitchCount;
+	}
 	
 	/**
 	 * Given value of axis in percentage.
@@ -182,7 +184,7 @@ public class JoystickContainer {
 	 */
 	public float getAxisValueInPercentage(float axisValue)
 	{
-		return (((2 - (1 - axisValue)) * 100) / 2);
+		return ((((joystickMaxVal-joystickMinVal) - (joystickMaxVal - axisValue)) * 100) / 2);
 	}
 	
 	//prefetches all components of the controller and maps them for easier access
