@@ -69,6 +69,12 @@ public class ManeuveringJoystick implements Runnable{
 			thrusterVal[i] = (int) ((axesValPercent[i]/100)*(thrusterValRange)) + THRUSTER_FULL_BW;
 		}
 	}
+	
+	//displays current val of all thrusters
+	public void dispValues() {
+		for(int i=0;i<thrusterVal.length;i++)
+			System.out.println("Thruster " + (i+1) + ": " + thrusterVal[i]);
+	}
 
 	//get thruster values
 	public int[] getThrustersVal() {
