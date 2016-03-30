@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
 import net.java.games.input.Controller;
 
 public class ManeuveringJoystick implements Runnable{
@@ -28,6 +29,7 @@ public class ManeuveringJoystick implements Runnable{
 		while(jC.getPoll() && jC.containsTask("Maneuver")) {
 			setThrusterVal();
 			dispValues();
+			sleep(100);
 		}
 	}
 	
@@ -57,15 +59,15 @@ public class ManeuveringJoystick implements Runnable{
 	//on z axis + is fw and - is reverse
 	private void calThrusterValNormal(float[] axesValPercent) {
 		int thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
-		//horizontal movement thrusters - x axis
+		//horizontal movement thrusters
 		thrusterVal[0] = THRUSTER_FULL_BW + thrusterValRange - (int) ((axesValPercent[0]/100)*(thrusterValRange));
 		thrusterVal[1] = thrusterVal[0];
 		
-		//fw/bw thrusters - y axis
+		//fw/bw thrusters
 		thrusterVal[2] = THRUSTER_FULL_BW + thrusterValRange - (int) ((axesValPercent[1]/100)*(thrusterValRange));
 		thrusterVal[3] = thrusterVal[2];
 	
-		//up/down thrusters - z axis
+		//up/down thrusters
 		thrusterVal[4] = THRUSTER_FULL_BW + thrusterValRange - (int) ((axesValPercent[2]/100)*(thrusterValRange));
 		thrusterVal[5] = thrusterVal[4];
 	}
@@ -75,7 +77,7 @@ public class ManeuveringJoystick implements Runnable{
 	private void calThrusterValHorizontal(float[] axesValPercent) {
 		int thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
 		//for left th[0] runs fw and th[1] runs bw
-		//for right vice versa - x axis
+		//for right vice versa
 		thrusterVal[0] = THRUSTER_FULL_BW + thrusterValRange - (int) ((axesValPercent[0]/100)*(thrusterValRange));
 		thrusterVal[1] = THRUSTER_FULL_BW + (int) ((axesValPercent[0]/100)*(thrusterValRange));
 	}
@@ -102,6 +104,7 @@ public class ManeuveringJoystick implements Runnable{
 		try {
 			TimeUnit.MILLISECONDS.sleep(i);
 		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

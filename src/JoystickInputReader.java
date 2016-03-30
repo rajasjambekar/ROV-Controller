@@ -26,9 +26,8 @@ public class JoystickInputReader implements Runnable {
 			new Thread(mJ).start();
 		}
 		//check if this joystick controls robotic arm
-		else if(jContainer.containsTask("RoboticArm")) {
-			Runnable rJ = new RoboticArmJoystick(jContainer);
-			new Thread(rJ).start();
+		else if(jContainer.getTaskList().contains("RoboticArm")) {
+			//Runnable rJ = new RoboticArmJoystick();
 		}
 	}
 

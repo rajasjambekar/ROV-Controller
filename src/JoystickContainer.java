@@ -26,7 +26,7 @@ public class JoystickContainer {
 	//In maneuvering, when toggle button is pressed, the rov will rotate clkwise/counte clkwise
 	//depending on the position of joystick
 	//i.e. value of this button read from (toggleButtonNumber - 1) position of array
-	int toggleButtonNumber = 1; 
+	int toggleButtonNumber = 2; 
 	
 	public JoystickContainer(Controller c) {
 		joystick = c;
@@ -41,14 +41,7 @@ public class JoystickContainer {
 		hatSwitchComponentList = new ArrayList<Component>();
 		taskList = new ArrayList<Task>();
 		setComponentList();
-		//addTask(new Task("Maneuver",0,0));
-		/*addTask(new Task("RoboticArm",0,0));
-		addTask(new Task("360Degree-",0,1));
-		addTask(new Task("360Degree+",0,2));
-		addTask(new Task("180Degree-",0,3));
-		addTask(new Task("180Degree+",0,4));
-		addTask(new Task("Gripper-",0,5));
-		addTask(new Task("Gripper+",0,6));*/
+		addTask(new Task("Maneuver",0,0));
 	}
 	
 	//reads data from all axes of this joystick
@@ -107,6 +100,7 @@ public class JoystickContainer {
 	
 	//displays current val of all axes and buttons
 	public void dispValues() {
+		System.out.println("Axis");
 		for(int i=0;i<axes.length;i++)
 			System.out.println(i + ": " + axes[i]);
 		for(int i=0;i<buttons.length;i++)
@@ -118,16 +112,6 @@ public class JoystickContainer {
 	//get the entire taskList
 	public ArrayList<Task> getTaskList() {
 		return taskList;
-	}
-	
-	//get task
-	public Task getTask(String taskName) {
-		for(Task t: taskList) {
-			if(t.getTaskName()==taskName) {
-				return t;
-			}
-		}
-		return null;
 	}
 	
 	//add task to taskList
@@ -158,7 +142,7 @@ public class JoystickContainer {
 	//no need to return buttonData
 	//reference of buttons object not to be given for security
 	public synchronized void getButtonsData(boolean buttonData[]) {
-		for(int i=0; i<buttonData.length; i++) {
+		for(int i=0; i<axes.length && i<buttonData.length; i++) {
 			buttonData[i] = buttons[i];
 		}
 	}
