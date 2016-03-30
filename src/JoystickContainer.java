@@ -21,7 +21,7 @@ public class JoystickContainer {
 	private ArrayList<Component> buttonComponentList = null, axesComponentList = null, hatSwitchComponentList = null;
 	private ArrayList<Task> taskList = null;
 	//toggle button is used for modifying the normal useage of axes values for specialized task
-	//In maneuvering, when toggle button is pressed, the rov will turn clockwise/anti clockwise
+	//In maneuvering, when toggle button is pressed, the rov will move left/right
 	//depending on the position of joystick
 	//i.e. value of this button read from (toggleButtonNumber - 1) position of array
 	int toggleButtonNumber = 2; 

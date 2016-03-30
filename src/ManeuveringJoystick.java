@@ -43,9 +43,7 @@ public class ManeuveringJoystick implements Runnable{
 		}
 		else {
 			//toggle button pressed
-			//Rotate rov only
-			//cannot use fw/bw thrusters cz it will interfere with rotation
-			//set fw/bw thruster val to THRUSTER_STOP
+			//ROV horizonal movement only
 		}
 	}
 	
