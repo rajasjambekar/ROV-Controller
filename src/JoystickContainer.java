@@ -51,17 +51,18 @@ public class JoystickContainer {
 			float axisValue = axesComponentList.get(i).getPollData();
 			//convert axisValue to percentage
 			float axisValueInPercentage = getAxisValueInPercentage(axisValue);
-			
+			//round off boundary values around 5%
+			axisValueInPercentage = roundOffValInPercentage(axisValueInPercentage);
 			//check type of axis and store its data
 			Identifier axisIdentifier = axesComponentList.get(i).getIdentifier();
 			if(axisIdentifier == Component.Identifier.Axis.X) {
-				this.axes[0] = axisValue;
+				this.axes[0] = axisValueInPercentage;
 			}
 			else if(axisIdentifier == Component.Identifier.Axis.Y) {
-				this.axes[1] = axisValue;
+				this.axes[1] = axisValueInPercentage;
 			}
 			else if(axisIdentifier == Component.Identifier.Axis.Z) {
-				this.axes[2] = axisValue;
+				this.axes[2] = axisValueInPercentage;
 			}
 		}
 	}
@@ -172,6 +173,20 @@ public class JoystickContainer {
 	//returns number of hat switch present in this joystick
 	public int getHatSwitchCount() {
 		return hatSwitchCount;
+	}
+	
+	//round off values near boundaries to prevent accidental thruster movement
+	private float roundOffValInPercentage(float axisValueInPercentage) {
+		//thruster reverse boundary
+		if(axisValueInPercentage<=10)
+			axisValueInPercentage = 0;
+		//thruster stopping boundary
+		else if((axisValueInPercentage<=50 && axisValueInPercentage>=40) || ((axisValueInPercentage>=50 && axisValueInPercentage<=60)))
+			axisValueInPercentage = 50;
+		//thruster forward boundary
+		else if(axisValueInPercentage>=90)
+			axisValueInPercentage = 100;
+		return axisValueInPercentage;
 	}
 	
 	/**
