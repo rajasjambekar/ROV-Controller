@@ -45,6 +45,7 @@ public class ManeuveringJoystick implements Runnable{
 		else {
 			//toggle button pressed
 			//ROV horizonal movement only
+			calThrusterValHorizontal(axesValPercent);
 		}
 	}
 	
@@ -54,6 +55,17 @@ public class ManeuveringJoystick implements Runnable{
 	private void calThrusterValNormal(float[] axesValPercent) {
 		int thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
 		for(int i=0;i<thrusterVal.length-2 && i<axesValPercent.length-2;i++) {
+			thrusterVal[i] = (int) ((axesValPercent[i]/100)*(thrusterValRange)) + THRUSTER_FULL_BW;
+		}
+	}
+	
+	//convert raw axes values to thruster values
+	//thrusters only work with integer values
+	//horizonal movement thrusters are in last positions of array 
+	//only horizonal movement thrusters work in horizontal mode 
+	private void calThrusterValHorizontal(float[] axesValPercent) {
+		int thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
+		for(int i=thrusterVal.length-2;i<thrusterVal.length && i<axesValPercent.length;i++) {
 			thrusterVal[i] = (int) ((axesValPercent[i]/100)*(thrusterValRange)) + THRUSTER_FULL_BW;
 		}
 	}
