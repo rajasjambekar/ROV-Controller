@@ -114,7 +114,7 @@ public class JoystickContainer {
 		}
 	}
 	
-	//gets state of only the toggle button
+	//gets state of only the toggle button associated with task t
 	public boolean getToggleButtonState(AxisTask t) {
 		return buttons[t.getToggleButtonNumber() - 1];
 	}
@@ -132,7 +132,7 @@ public class JoystickContainer {
 	//get axisTask
 	public AxisTask getAxisTask(String taskName) {
 		for(AxisTask t: axisTaskList) {
-			if(t.getTaskName()==taskName) {
+			if(t.getTaskName().equalsIgnoreCase(taskName)) {
 				return t;
 			}
 		}
@@ -140,9 +140,9 @@ public class JoystickContainer {
 	}
 	
 	//get buttonTask
-	public ButtonTask getTask(String taskName) {
+	public ButtonTask getButtonTask(String taskName) {
 		for(ButtonTask t: buttonTaskList) {
-			if(t.getTaskName()==taskName) {
+			if(t.getTaskName().equalsIgnoreCase(taskName)) {
 				return t;
 			}
 		}
@@ -162,7 +162,7 @@ public class JoystickContainer {
 	//removes task from axisTaskList
 	public void removeAxisTask(String taskName) {
 		for(AxisTask t: axisTaskList) {
-			if(t.getTaskName()==taskName) {
+			if(t.getTaskName().equalsIgnoreCase(taskName)) {
 				axisTaskList.remove(t);
 			}
 		}
@@ -171,7 +171,7 @@ public class JoystickContainer {
 	//removes task from buttonTaskList
 	public void removeButtonTask(String taskName) {
 		for(ButtonTask t: buttonTaskList) {
-			if(t.getTaskName()==taskName) {
+			if(t.getTaskName().equalsIgnoreCase(taskName)) {
 				buttonTaskList.remove(t);
 			}
 		}
@@ -180,7 +180,7 @@ public class JoystickContainer {
 	//check whether axisTaskList contains task
 	public boolean containsAxisTask(String taskName) {
 		for(AxisTask t: axisTaskList) {
-			if(t.getTaskName()==taskName) {
+			if(t.getTaskName().equalsIgnoreCase(taskName)) {
 				return true;
 			}
 		}
@@ -190,7 +190,7 @@ public class JoystickContainer {
 	//check whether axisTaskList contains task type
 	public boolean containsAxisTaskType(String taskType) {
 		for(AxisTask t: axisTaskList) {
-			if(t.getTaskType()==taskType) {
+			if(t.getTaskType().equalsIgnoreCase(taskType)) {
 				return true;
 			}
 		}
@@ -200,7 +200,7 @@ public class JoystickContainer {
 	//check whether buttonTaskList contains task type
 	public boolean containsButtonTaskType(String taskType) {
 		for(ButtonTask t: buttonTaskList) {
-			if(t.getTaskType()==taskType) {
+			if(t.getTaskType().equalsIgnoreCase(taskType)) {
 				return true;
 			}
 		}
@@ -210,7 +210,7 @@ public class JoystickContainer {
 	//check whether buttonTaskList contains task
 	public boolean containsButtonTask(String taskName) {
 		for(ButtonTask t: buttonTaskList) {
-			if(t.getTaskName()==taskName) {
+			if(t.getTaskName().equalsIgnoreCase(taskName)) {
 				return true;
 			}
 		}
@@ -266,9 +266,9 @@ public class JoystickContainer {
 		//higher boundary
 		else if(axisValueInPercentage>=90)
 			axisValueInPercentage = 100;
-		/*else {
+		else {
 			axisValueInPercentage -= axisValueInPercentage%10;
-		}*/
+		}
 		return axisValueInPercentage;
 	}
 	
