@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import net.java.games.input.Controller;
@@ -11,10 +12,20 @@ public class ManeuveringJoystick implements Runnable{
 	private int THRUSTER_FULL_FW = 1850;	//thruster full forward val
 	private int THRUSTER_FULL_BW = 1150;	//thruster full backward val
 	JoystickContainer jC;
+	private Socket client;
+	TCPSender tcpSender;
+	int thrusterValRange;
 	
-	public ManeuveringJoystick(JoystickContainer jC) {
+	public ManeuveringJoystick(JoystickContainer jC, Socket client) {
 		this.jC = jC;
+		this.client = client;
+		try {
+			tcpSender = new TCPSender(this.client);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		thrusterVal = new int[numThrusters];
+		thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
 		//set all thrusters with stop val
 		stopThrusters();
 	}
@@ -25,9 +36,10 @@ public class ManeuveringJoystick implements Runnable{
 		//Stop thread from executing if controller gets disconnected
 		//thread will restart when controller is rediscovered
 		//Also keep checking if controller contains task to maneuver rov
-		while(jC.getPoll() && jC.containsTask("Maneuver")) {
+		while(jC.getPoll() && jC.containsAxisTaskType("Maneuver")) {
 			setThrusterVal();
-			dispValues();
+			//dispValues();
+			sleep(1000);
 		}
 	}
 	
@@ -36,50 +48,109 @@ public class ManeuveringJoystick implements Runnable{
 		//get raw axes data
 		float axesValPercent[] = new float[jC.getAxisCount()];
 		jC.getAxesData(axesValPercent);
-		boolean toggleButtonState = jC.getToggleButtonState();
-		stopThrusters();	//re init thruster values to stop val for safety
-		if(!toggleButtonState) {
-			//toggle button not pressed
-			//normal maneuvering calculations
-			calThrusterValNormal(axesValPercent);
-		}
-		else {
-			//toggle button pressed
-			//ROV rotation movement only
-			calThrusterValHorizontal(axesValPercent);
-		}
-	}
-	
-	//convert raw axes values to thruster values
-	//thrusters only work with integer values
-	//only fw/bw movement thrusters work in horizontal mode in reverse dir
-	//On joystick top left is FW FW and right bottom is BW BW for thrusters
-	//on z axis + is fw and - is reverse
-	private void calThrusterValNormal(float[] axesValPercent) {
-		int thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
-		//horizontal movement thrusters - x axis
-		thrusterVal[0] = THRUSTER_FULL_BW + thrusterValRange - (int) ((axesValPercent[0]/100)*(thrusterValRange));
-		thrusterVal[1] = thrusterVal[0];
 		
-		//fw/bw thrusters - y axis
-		thrusterVal[2] = THRUSTER_FULL_BW + thrusterValRange - (int) ((axesValPercent[1]/100)*(thrusterValRange));
-		thrusterVal[3] = thrusterVal[2];
-	
-		//up/down thrusters - z axis
-		thrusterVal[4] = THRUSTER_FULL_BW + thrusterValRange - (int) ((axesValPercent[2]/100)*(thrusterValRange));
-		thrusterVal[5] = thrusterVal[4];
+		//update values for all tasks of type maneuver
+		ArrayList<AxisTask> axisTaskList = jC.getAxisTaskList();
+		for(int i=0;i<axisTaskList.size();i++) {
+			AxisTask task = axisTaskList.get(i);
+			if(task.getTaskType()=="Maneuver") {
+				if(task.containsToggleButton()) {
+					//task triggered by toggle button
+					if(jC.getToggleButtonState(task)) {
+						//toggle button is pressed
+						calVal(task.getTaskName(), axesValPercent[task.getAxisNumber()], task.getCode());
+					}
+					else {
+						//toggle button is not pressed
+					}
+				}
+				else {
+					//task not triggered by toggle button
+					calVal(task.getTaskName(), axesValPercent[task.getAxisNumber()], task.getCode());
+				}
+			}
+		}
 	}
 	
-	//convert raw axes values to thruster values
-	//thrusters only work with integer values
-	private void calThrusterValHorizontal(float[] axesValPercent) {
-		int thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
-		//for left th[0] runs fw and th[1] runs bw
-		//for right vice versa - x axis
-		thrusterVal[0] = THRUSTER_FULL_BW + thrusterValRange - (int) ((axesValPercent[0]/100)*(thrusterValRange));
-		thrusterVal[1] = THRUSTER_FULL_BW + (int) ((axesValPercent[0]/100)*(thrusterValRange));
+	//calculate the final value of the task. If any other task is to be added, add a condition 
+	//checking for the taskName.
+	//Send the value over tcp only if the new value deviates from the previous value over a limit
+	//code value is combination of 2 thruster codes each 2 digit thus making 4 digit code
+	//while sending over tcp, separate the codes of both thrusters and send them after *100
+	private void calVal(String taskName, float axisVal, int code) {
+		if(taskName=="LFRT") {
+			//horizontal movement thrusters
+			int tVal = THRUSTER_FULL_BW + thrusterValRange - (int) ((axisVal/100)*(thrusterValRange));
+			int code1 = (code/100)*100;
+			int code2 = (code%100)*100;
+			if(compareThrusterVal(thrusterVal[0], tVal)) {
+				//set new val and send over tcp
+				thrusterVal[0] = tVal;
+				tcpSender.sendData(code1, tVal);
+			}
+			if(compareThrusterVal(thrusterVal[1], tVal)) {
+				thrusterVal[1] = tVal;
+				tcpSender.sendData(code2, tVal);
+			}
+		}
+		else if(taskName=="FWBW") {
+			//fw/bw thrusters
+			int tVal = THRUSTER_FULL_BW + thrusterValRange - (int) ((axisVal/100)*(thrusterValRange));
+			int code1 = (code/100)*100;
+			int code2 = (code%100)*100;
+			if(compareThrusterVal(thrusterVal[2], tVal)) {
+				//set new val and send over tcp
+				thrusterVal[2] = tVal;
+				tcpSender.sendData(code1, tVal);
+			}
+			if(compareThrusterVal(thrusterVal[3], tVal)) {
+				thrusterVal[3] = tVal;
+				tcpSender.sendData(code2, tVal);
+			}
+		}
+		else if(taskName=="UPDN") {
+			//up/down thrusters
+			int tVal = THRUSTER_FULL_BW + thrusterValRange - (int) ((axisVal/100)*(thrusterValRange));
+			int code1 = (code/100)*100;
+			int code2 = (code%100)*100;
+			if(compareThrusterVal(thrusterVal[4], tVal)) {
+				//set new val and send over tcp
+				thrusterVal[4] = tVal;
+				tcpSender.sendData(code1, tVal);
+			}
+			if(compareThrusterVal(thrusterVal[5], tVal)) {
+				thrusterVal[5] = tVal;
+				tcpSender.sendData(code2, tVal);
+			}
+		}
+		else if(taskName=="CLKA") {
+			//rotation thrusters.
+			//one motor fw and other reverse
+			int t0 = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
+			int t1 = THRUSTER_FULL_BW + (int) ((axisVal/100)*(thrusterValRange));
+			int code1 = (code/100)*100;
+			int code2 = (code%100)*100;
+			if(compareThrusterVal(thrusterVal[0], t0)) {
+				//set new val and send over tcp
+				thrusterVal[0] = t0;
+				tcpSender.sendData(code1, t0);
+			}
+			if(compareThrusterVal(thrusterVal[1], t1)) {
+				thrusterVal[1] = t1;
+				tcpSender.sendData(code2, t1);
+			}
+		}
 	}
 	
+	//check if there is a change in thruster value
+	private boolean compareThrusterVal(int prevVal, int newVal) {
+		if((newVal>prevVal && newVal-prevVal>100) || (newVal<prevVal && prevVal-newVal>100)) {
+			//thruster value changed
+			return true;
+		}
+		return false;
+	}
+
 	//displays current val of all thrusters
 	public void dispValues() {
 		for(int i=0;i<thrusterVal.length;i++)
