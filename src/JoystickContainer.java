@@ -21,12 +21,8 @@ public class JoystickContainer {
 	//component list maps each axis and button to physical axis and button on the joystick for 
 	//quick access to object while reading value
 	private ArrayList<Component> buttonComponentList = null, axesComponentList = null, hatSwitchComponentList = null;
-	private ArrayList<Task> taskList = null;
-	//toggle button is used for modifying the normal useage of axes values for specialized task
-	//In maneuvering, when toggle button is pressed, the rov will rotate clkwise/counte clkwise
-	//depending on the position of joystick
-	//i.e. value of this button read from (toggleButtonNumber - 1) position of array
-	int toggleButtonNumber = 1; 
+	private ArrayList<AxisTask> axisTaskList;
+	private ArrayList<ButtonTask> buttonTaskList;
 	
 	public JoystickContainer(Controller c) {
 		joystick = c;
@@ -39,16 +35,34 @@ public class JoystickContainer {
 		buttonComponentList = new ArrayList<Component>();
 		axesComponentList = new ArrayList<Component>();
 		hatSwitchComponentList = new ArrayList<Component>();
-		taskList = new ArrayList<Task>();
+		axisTaskList = new ArrayList<AxisTask>();
+		buttonTaskList = new ArrayList<ButtonTask>();
 		setComponentList();
 		//addTask(new Task("Maneuver",0,0));
-		/*addTask(new Task("RoboticArm",0,0));
-		addTask(new Task("360Degree-",0,1));
-		addTask(new Task("360Degree+",0,2));
-		addTask(new Task("180Degree-",0,3));
-		addTask(new Task("180Degree+",0,4));
-		addTask(new Task("Gripper-",0,5));
-		addTask(new Task("Gripper+",0,6));*/
+		/*addTask(new Task("RoboticArmPAN-",4100,0));
+		addTask(new Task("RoboticArmPAN+",4101,0));
+		addTask(new Task("RoboticArmFWBW-",4200,0));
+		addTask(new Task("RoboticArmFWBW+",4201,0));
+		addTask(new Task("RoboticArmUPDN-",4300,0));
+		addTask(new Task("RoboticArmUPDN+",4301,0));
+		addTask(new Task("360Degree-",4400,1));
+		addTask(new Task("360Degree+",4401,2));
+		addTask(new Task("180Degree-",4500,3));
+		addTask(new Task("180Degree+",4501,4));
+		addTask(new Task("Gripper-",4600,5));
+		addTask(new Task("Gripper+",4601,6));
+		addTask(new Task("Claw-",4700,7));
+		addTask(new Task("Claw+",4701,8));*/
+	}
+	
+	//displays current val of all axes and buttons
+	public void dispValues() {
+		for(int i=0;i<axes.length;i++)
+			System.out.println(i + ": " + axes[i]);
+		for(int i=0;i<buttons.length;i++)
+			System.out.println(i + ": " + buttons[i]);
+		for(int i=0;i<hatSwitches.length;i++)
+			System.out.println(i + ": " + hatSwitches[i]);
 	}
 	
 	//reads data from all axes of this joystick
@@ -101,28 +115,23 @@ public class JoystickContainer {
 	}
 	
 	//gets state of only the toggle button
-	public boolean getToggleButtonState() {
-		return buttons[toggleButtonNumber - 1];
+	public boolean getToggleButtonState(AxisTask t) {
+		return buttons[t.getToggleButtonNumber() - 1];
 	}
 	
-	//displays current val of all axes and buttons
-	public void dispValues() {
-		for(int i=0;i<axes.length;i++)
-			System.out.println(i + ": " + axes[i]);
-		for(int i=0;i<buttons.length;i++)
-			System.out.println(i + ": " + buttons[i]);
-		for(int i=0;i<hatSwitches.length;i++)
-			System.out.println(i + ": " + hatSwitches[i]);
+	//get the entire axisTaskList
+	public ArrayList<AxisTask> getAxisTaskList() {
+		return axisTaskList;
 	}
 	
-	//get the entire taskList
-	public ArrayList<Task> getTaskList() {
-		return taskList;
+	//get the entire buttonTaskList
+	public ArrayList<ButtonTask> getButtonTaskList() {
+		return buttonTaskList;
 	}
 	
-	//get task
-	public Task getTask(String taskName) {
-		for(Task t: taskList) {
+	//get axisTask
+	public AxisTask getAxisTask(String taskName) {
+		for(AxisTask t: axisTaskList) {
 			if(t.getTaskName()==taskName) {
 				return t;
 			}
@@ -130,23 +139,77 @@ public class JoystickContainer {
 		return null;
 	}
 	
-	//add task to taskList
-	public void addTask(Task t) {
-		taskList.add(t);
+	//get buttonTask
+	public ButtonTask getTask(String taskName) {
+		for(ButtonTask t: buttonTaskList) {
+			if(t.getTaskName()==taskName) {
+				return t;
+			}
+		}
+		return null;
 	}
 	
-	//removes task from taskList
-	public void removeTask(String taskName) {
-		for(Task t: taskList) {
+	//add task to axisTaskList
+	public void addAxisTask(AxisTask t) {
+		axisTaskList.add(t);
+	}
+	
+	//add task to buttonTaskList
+	public void addButtonTask(ButtonTask t) {
+		buttonTaskList.add(t);
+	}
+	
+	//removes task from axisTaskList
+	public void removeAxisTask(String taskName) {
+		for(AxisTask t: axisTaskList) {
 			if(t.getTaskName()==taskName) {
-				taskList.remove(t);
+				axisTaskList.remove(t);
 			}
 		}
 	}
 	
-	//check whether taskList contains task
-	public boolean containsTask(String taskName) {
-		for(Task t: taskList) {
+	//removes task from buttonTaskList
+	public void removeButtonTask(String taskName) {
+		for(ButtonTask t: buttonTaskList) {
+			if(t.getTaskName()==taskName) {
+				buttonTaskList.remove(t);
+			}
+		}
+	}
+	
+	//check whether axisTaskList contains task
+	public boolean containsAxisTask(String taskName) {
+		for(AxisTask t: axisTaskList) {
+			if(t.getTaskName()==taskName) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	//check whether axisTaskList contains task type
+	public boolean containsAxisTaskType(String taskType) {
+		for(AxisTask t: axisTaskList) {
+			if(t.getTaskType()==taskType) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	//check whether buttonTaskList contains task type
+	public boolean containsButtonTaskType(String taskType) {
+		for(ButtonTask t: buttonTaskList) {
+			if(t.getTaskType()==taskType) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	//check whether buttonTaskList contains task
+	public boolean containsButtonTask(String taskName) {
+		for(ButtonTask t: buttonTaskList) {
 			if(t.getTaskName()==taskName) {
 				return true;
 			}
@@ -194,15 +257,18 @@ public class JoystickContainer {
 	
 	//round off values near boundaries to prevent accidental thruster movement
 	private float roundOffValInPercentage(float axisValueInPercentage) {
-		//thruster reverse boundary
+		//lower boundary
 		if(axisValueInPercentage<=10)
 			axisValueInPercentage = 0;
-		//thruster stopping boundary
+		//central boundary
 		else if((axisValueInPercentage<=50 && axisValueInPercentage>=45) || ((axisValueInPercentage>=50 && axisValueInPercentage<=55)))
 			axisValueInPercentage = 50;
-		//thruster forward boundary
+		//higher boundary
 		else if(axisValueInPercentage>=90)
 			axisValueInPercentage = 100;
+		/*else {
+			axisValueInPercentage -= axisValueInPercentage%10;
+		}*/
 		return axisValueInPercentage;
 	}
 	
