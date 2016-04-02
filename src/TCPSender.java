@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 /*
  * Sends data over data output stream to client (arduino)
@@ -33,10 +34,20 @@ public class TCPSender {
 	}
 	
 	//write chars on dataoutputstream object
-	private void send() {
+	private synchronized void send() {
+		System.out.println(msg);
 		try {
 			out.writeChars(msg);
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//sleep(100);
+	}
+	
+	private void sleep(int i) {
+		try {
+			TimeUnit.MILLISECONDS.sleep(i);
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
