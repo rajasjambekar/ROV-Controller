@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -12,22 +13,24 @@ public class JoystickInputReader implements Runnable {
 	private JoystickContainer jContainer;
 	private Runnable mJ = null;
 	private Runnable rJ = null;
+	private Socket client;
+	TCPSender tcpSender;
 	
-	
-	public JoystickInputReader(JoystickContainer jc) {
+	public JoystickInputReader(JoystickContainer jc, Socket client) {
 		this.jContainer = jc;
+		this.client = client;
 		checkTasks();
 	}
 	
 	private void checkTasks() {
 		//check if this joystick controls maneuvering
-		if(jContainer.containsTask("Maneuver")) {
-			Runnable mJ = new ManeuveringJoystick(jContainer);
+		if(jContainer.containsAxisTaskType("Maneuver")) {
+			Runnable mJ = new ManeuveringJoystick(jContainer, client);
 			new Thread(mJ).start();
 		}
 		//check if this joystick controls robotic arm
-		else if(jContainer.containsTask("RoboticArm")) {
-			Runnable rJ = new RoboticArmJoystick(jContainer);
+		else if(jContainer.containsAxisTaskType("RoboticArm")) {
+			Runnable rJ = new RoboticArmJoystick(jContainer, client);
 			new Thread(rJ).start();
 		}
 	}
@@ -40,6 +43,7 @@ public class JoystickInputReader implements Runnable {
 			jContainer.readAxes();
 			jContainer.readButtons();
 			//jContainer.dispValues();
+			//sleep(10);
 		}
 	}
 
