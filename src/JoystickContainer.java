@@ -119,6 +119,18 @@ public class JoystickContainer {
 		return buttons[t.getToggleButtonNumber() - 1];
 	}
 	
+	//check if any task has registered a togglebutton for this axis
+	//if yes, check if button pressed
+	public boolean checkAxisToggleButtonPressed(int axisNo) {
+		for(AxisTask axisTask:axisTaskList) {
+			if(axisTask.containsToggleButton() && axisTask.getAxisNumber()==axisNo) {
+				if(buttons[axisTask.getToggleButtonNumber()-1])
+					return true;
+			}
+		}
+		return false;
+	}
+	
 	//get the entire axisTaskList
 	public ArrayList<AxisTask> getAxisTaskList() {
 		return axisTaskList;
