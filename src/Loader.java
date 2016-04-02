@@ -48,15 +48,14 @@ public class Loader {
 		while((str=buff.readLine()).contains(":")) {
 			String[] parts = str.split(":");
 			AxisTask task = new AxisTask(parts[0],parts[1],Integer.parseInt(parts[2]),Integer.parseInt(parts[3]));
+			task.setToggleButtonNumber(Integer.parseInt(parts[4]));
+			if(Integer.parseInt(parts[4])!=0) {
+				ButtonTask bTask = new ButtonTask("Toggle", parts[1], 0, Integer.parseInt(parts[4]));
+				jc.addButtonTask(bTask);
+			}
 			jc.addAxisTask(task);
 			System.out.println("Enter tasks:");
 		}
-		AxisTask task = new AxisTask("CLKW","Maneuver",1300,0);
-		task.setToggleButtonNumber(1);
-		jc.addAxisTask(task);
-		task = new AxisTask("ACLK","Maneuver",1300,0);
-		task.setToggleButtonNumber(1);
-		jc.addAxisTask(task);
 	}
 
 	//start tcp connection
