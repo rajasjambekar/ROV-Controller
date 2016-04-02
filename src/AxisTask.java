@@ -51,6 +51,7 @@ public class AxisTask {
 		return axisNumber;
 	}
 	
+	//default is 0
 	public int getToggleButtonNumber() {
 		return toggleButton;
 	}
