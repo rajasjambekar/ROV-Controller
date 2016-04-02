@@ -66,8 +66,10 @@ public class ManeuveringJoystick implements Runnable{
 					}
 				}
 				else {
-					//task not triggered by toggle button
-					calVal(task.getTaskName(), axesValPercent[task.getAxisNumber()], task.getCode());
+					//if toggle button is pressed for this axis do not read value
+					if(!jC.checkAxisToggleButtonPressed(task.getAxisNumber()))
+						//task not triggered by toggle button
+						calVal(task.getTaskName(), axesValPercent[task.getAxisNumber()], task.getCode());
 				}
 			}
 		}
@@ -96,116 +98,67 @@ public class ManeuveringJoystick implements Runnable{
 	//This code is common for buttons and axis
 	//In case of buttons, the value of axisVal is 1/0. 
 	private void calVal(String taskName, float axisVal, int code) {
-		if(taskName.equalsIgnoreCase("LEFT")) {
-			if(axisVal==-2)	//thruster on
-				axisVal = 90;	//buttons are on off. So do not power thrusters to full value
-			else if(axisVal==-1)
-				axisVal = 50;
-				
-			//horizontal movement thrusters
-			int tVal = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
-			//System.out.println(tVal);
-			if(compareThrusterVal(thrusterVal[0], tVal)) {
-				//set new val and send over tcp
-				thrusterVal[0] = tVal;
-				//tcpSender.sendData(code, tVal);
-			}
+		if(taskName.equalsIgnoreCase("TH_LR1")) {
+			int dir = 1;
+			int pos = 0;
+			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
 		}
-		else if(taskName.equalsIgnoreCase("RIGHT")) {
-			if(axisVal==-2)	//thruster on
-				axisVal = 90;	//buttons are on off. So do not power thrusters to full value
-			else if(axisVal==-1)
-				axisVal = 50;
-				
-			//horizontal movement thrusters
-			int tVal = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
-			if(compareThrusterVal(thrusterVal[1], tVal)) {
-				thrusterVal[1] = tVal;
-				//tcpSender.sendData(code, tVal);
-			}
+		else if(taskName.equalsIgnoreCase("TH_LR2")) {
+			int dir = 1;
+			int pos = 1;
+			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
 		}
-		else if(taskName.equalsIgnoreCase("FORW")) {
-			if(axisVal==-2)	//thruster on
-				axisVal = 90;	//buttons are on off. So do not power thrusters to full value
-			else if(axisVal==-1)
-				axisVal = 50;
-				
-			//fw/bw thrusters
-			int tVal = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
-			if(compareThrusterVal(thrusterVal[2], tVal)) {
-				//set new val and send over tcp
-				thrusterVal[2] = tVal;
-				//tcpSender.sendData(code, tVal);
-			}
+		else if(taskName.equalsIgnoreCase("TH_FB1")) {
+			int dir = 1;
+			int pos = 2;
+			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
 		}
-		else if(taskName.equalsIgnoreCase("BCKW")) {
-			if(axisVal==-2)	//thruster on
-				axisVal = 90;	//buttons are on off. So do not power thrusters to full value
-			else if(axisVal==-1)
-				axisVal = 50;
-				
-			//fw/bw thrusters
-			int tVal = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
-			if(compareThrusterVal(thrusterVal[3], tVal)) {
-				thrusterVal[3] = tVal;
-				//tcpSender.sendData(code, tVal);
-			}
+		else if(taskName.equalsIgnoreCase("TH_FB2")) {
+			int dir = 1;
+			int pos = 3;
+			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
 		}
-		else if(taskName.equalsIgnoreCase("UPWD")) {
-			if(axisVal==-2)	//thruster on
-				axisVal = 90;	//buttons are on off. So do not power thrusters to full value
-			else if(axisVal==-1)
-				axisVal = 50;
-				
-			//up/down thrusters
-			int tVal = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
-			if(compareThrusterVal(thrusterVal[4], tVal)) {
-				//set new val and send over tcp
-				thrusterVal[4] = tVal;
-				//tcpSender.sendData(code, tVal);
-			}
+		else if(taskName.equalsIgnoreCase("TH_UD1")) {
+			int dir = 1;
+			int pos = 4;
+			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
 		}
-		else if(taskName.equalsIgnoreCase("DNWD")) {
-			if(axisVal==-2)	//thruster on
-				axisVal = 90;	//buttons are on off. So do not power thrusters to full value
-			else if(axisVal==-1)
-				axisVal = 50;
-				
-			//up/down thrusters
-			int tVal = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
-			if(compareThrusterVal(thrusterVal[5], tVal)) {
-				thrusterVal[5] = tVal;
-				//tcpSender.sendData(code, tVal);
-			}
+		else if(taskName.equalsIgnoreCase("TH_UD2")) {
+			int dir = 1;
+			int pos = 5;
+			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
 		}
-		else if(taskName.equalsIgnoreCase("CLKW")) {
-			if(axisVal==-2)	//thruster on
-				axisVal = 90;	//buttons are on off. So do not power thrusters to full value
-			else if(axisVal==-1)
-				axisVal = 50;
-				
-			//rotation thrusters.
+		else if(taskName.equalsIgnoreCase("TH_RT1")) {
+			int dir = 1;
+			int pos = 0;
+			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
+		}
+		else if(taskName.equalsIgnoreCase("TH_RT2")) {
+			int dir = -1;
+			int pos = 1;
+			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
+		}
+	}
+	
+	private void setThrusterVal(int prevVal, float axisVal, int code, int dir, int pos) {
+		if(axisVal==-2)	//thruster on
+			axisVal = 90;	//buttons are on off. So do not power thrusters to full value
+		else if(axisVal==-1)
+			axisVal = 50;
+		
+		int t = 0;
+		if(dir==1)
+			//normal thrusters
+			t = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
+		else
+			//rotation thruster.
 			//one motor fw and other reverse
-			int t0 = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
-			if(compareThrusterVal(thrusterVal[0], t0)) {
-				//set new val and send over tcp
-				thrusterVal[0] = t0;
-				//tcpSender.sendData(code, t0);
-			}
-		}
-		else if(taskName.equalsIgnoreCase("ACLK")) {
-			if(axisVal==-2)	//thruster on
-				axisVal = 90;	//buttons are on off. So do not power thrusters to full value
-			else if(axisVal==-1)
-				axisVal = 50;
-				
-			//rotation thrusters.
-			//one motor fw and other reverse
-			int t1 = THRUSTER_FULL_BW + (int) ((axisVal/100)*(thrusterValRange));
-			if(compareThrusterVal(thrusterVal[1], t1)) {
-				thrusterVal[1] = t1;
-				//tcpSender.sendData(code, t1);
-			}
+			t = THRUSTER_FULL_BW + (int) ((axisVal/100)*(thrusterValRange));
+		if(compareThrusterVal(thrusterVal[1], t)) {
+			if(t<1600 && t>1400)
+				t = THRUSTER_STOP;
+			thrusterVal[pos] = t;
+			//tcpSender.sendData(code, t);
 		}
 	}
 	
