@@ -13,11 +13,12 @@ public class AxisTask {
 	private int axisNumber;  //x - 0, y - 1, z - 2
 	private int toggleButton = 0;
 	
-	public AxisTask(String taskName, String taskType, int  code, int axisNumber) {
+	public AxisTask(String taskName, String taskType, int  code, int axisNumber, int toggleButton) {
 		this.taskName = taskName;  //name of task for user reference
 		this.taskType = taskType;  //type of task for user reference
 		this.code = code;   // Code used by arduino to identify component connected to arduino
 		this.axisNumber = axisNumber; //button number of the joystick holding object of this class
+		this.toggleButton = toggleButton;
 	}
 	
 	//check if this task requires press of toggle button
