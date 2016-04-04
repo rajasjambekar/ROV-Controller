@@ -34,6 +34,7 @@ public class DiscoverControllers {
 		startAssignId();
 	}
 	
+	//removes all controllers from the connectedControllers list
 	private void removeAllIdentifiedControllers() {
 		String keys[] = new String[connectedControllers.size()];
 		connectedControllers.keySet().toArray(keys);
@@ -45,9 +46,11 @@ public class DiscoverControllers {
 	//assigns a unique identifier to the connected controllers
 	private void startAssignId() {
 		for(Controller c:connectedControllerList) {
-			if(!connectedControllers.containsValue(c)) {
-				//controllers of this type are not encountered
-				assignId(c.getType().toString());
+			if(c.getType().toString().equalsIgnoreCase("Stick")) {
+				if(!connectedControllers.containsValue(c.getType().toString())) {
+					//controllers of this type are not encountered yet
+					assignId(c.getType().toString());
+				}
 			}
 		}
 	}
@@ -59,15 +62,21 @@ public class DiscoverControllers {
 			//check type
 			if(c.getType().toString()==type && !connectedControllers.containsValue(c)) {
 				//assign id as 'type+count'
-				String id = c.getType().toString() + Integer.toString(count++);
+				StringBuilder id = new StringBuilder();
+				id.append(c.getName().toString() + "-");
+				id.append(c.getType().toString());
+				id.append(count++);
 				//check if id is assigned
 				while(connectedControllers.containsKey(id)) {
 					//generate new id
-					id = c.getType().toString() + Integer.toString(count++);
+					id = new StringBuilder();
+					id.append(c.getName().toString());
+					id.append(c.getType().toString());
+					id.append(count++);
 				}
 				//key not used previously
-				connectedControllers.put(id, c);
-				//System.out.println(id + " " + c.getName() + " " + c.getType());
+				connectedControllers.put(id.toString(), c);
+				//System.out.println(id);
 			}
 		}
 	}
