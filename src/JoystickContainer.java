@@ -164,11 +164,23 @@ public class JoystickContainer {
 	//add task to axisTaskList
 	public void addAxisTask(AxisTask t) {
 		axisTaskList.add(t);
+		//System.out.println(t.getTaskName() + " " + t.getTaskType() + " " + t.getAxisNumber() + " " + t.getToggleButtonNumber() + " " + t.getCode());
 	}
 	
 	//add task to buttonTaskList
+	//check if button numbers are repeating
+	//multi function buttons are allowed but toggle button can only be used to toggle
 	public void addButtonTask(ButtonTask t) {
-		buttonTaskList.add(t);
+		for(ButtonTask b:buttonTaskList) {
+			if(b.getButtonNumber()==t.getButtonNumber()) {
+				if((t.getTaskName().equalsIgnoreCase("Toggle") && b.getTaskName().equalsIgnoreCase("Toggle"))
+						|| (!t.getTaskName().equalsIgnoreCase("Toggle") && !b.getTaskName().equalsIgnoreCase("Toggle"))) {
+					buttonTaskList.add(t);
+
+					//System.out.println(t.getTaskName() + " " + t.getTaskType() + " " + t.getButtonNumber() + " " + t.getCode());
+				}
+			}
+		}
 	}
 	
 	//removes task from axisTaskList
@@ -202,6 +214,7 @@ public class JoystickContainer {
 	//check whether axisTaskList contains task type
 	public boolean containsAxisTaskType(String taskType) {
 		for(AxisTask t: axisTaskList) {
+			System.out.println(t.getTaskType());
 			if(t.getTaskType().equalsIgnoreCase(taskType)) {
 				return true;
 			}
@@ -312,6 +325,11 @@ public class JoystickContainer {
 					//add to button component list
 					buttonComponentList.add(controllerComponents[i]);
 				}
+				else if(componentIdentifier == Component.Identifier.Axis.POV){
+					//Component is an axis
+					//add to axis component list
+					hatSwitchComponentList.add(controllerComponents[i]);
+				}
 				else if(controllerComponents[i].isAnalog()){
 					//Component is an axis
 					//add to axis component list
@@ -355,5 +373,10 @@ public class JoystickContainer {
 				count++;
 		}
 		hatSwitchCount = count;
+	}
+	
+	//returns connected controller
+	public Controller getController() {
+		return joystick;
 	}
 }
