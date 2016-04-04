@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.shape.Rectangle?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerGUI">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="Configurations">
+          <items>
+            <MenuItem fx:id="menuRediscover" mnemonicParsing="false" text="Re-Discover Controllers" />
+            <MenuItem fx:id="menuControllerConfig" mnemonicParsing="false" text="Configure Controllers" />
+            <MenuItem fx:id="menuQuit" mnemonicParsing="false" text="Quit" />
+          </items>
+        </Menu>
+            <Menu mnemonicParsing="false" text="Engines">
+               <items>
+                  <MenuItem fx:id="menuStartEngines" mnemonicParsing="false" text="Start Engines!" />
+                  <MenuItem fx:id="menuStopEngines" mnemonicParsing="false" text="Stop Engines" />
+               </items>
+            </Menu>
+      </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Circle fill="#cacdd0" layoutX="193.0" layoutY="130.0" radius="41.0" stroke="BLACK" strokeType="INSIDE" />
+            <Ellipse fill="DODGERBLUE" layoutX="124.0" layoutY="130.0" radiusX="28.0" radiusY="6.0" stroke="BLACK" strokeType="INSIDE" />
+            <Ellipse fill="DODGERBLUE" layoutX="262.0" layoutY="130.0" radiusX="28.0" radiusY="6.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="DODGERBLUE" layoutX="152.0" layoutY="171.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="DODGERBLUE" layoutX="234.0" layoutY="171.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="32.0" layoutX="184.0" layoutY="171.0" stroke="BLACK" strokeType="INSIDE" width="19.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="32.0" layoutX="184.0" layoutY="211.0" stroke="BLACK" strokeType="INSIDE" width="19.0" />
+         </children>
+    </AnchorPane>
+  </children>
+</VBox>
