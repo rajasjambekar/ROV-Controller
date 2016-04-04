@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="1000" maxWidth="1000" prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ConfigurationUI">
+   <children>
+      <MenuBar fx:id="menuBar" prefWidth="700.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="menuClose" mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <BorderPane layoutY="24.0" prefHeight="376.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
+         <center>
+            <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ScrollPane prefHeight="400.0" prefWidth="700.0">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="384.0" prefWidth="699.0">
+                           <children>
+                              <HBox layoutY="25.0" prefHeight="41.0" prefWidth="700.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="52.0" prefWidth="699.0">
+                                       <children>
+                                          <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="601.0" text="Configure Controllers" textAlignment="CENTER" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutY="66.0" prefHeight="42.0" prefWidth="700.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="42.0" prefWidth="698.0">
+                                       <children>
+                                          <ChoiceBox fx:id="controllerChooser" prefWidth="150.0" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutY="123.0" prefHeight="42.0" prefWidth="700.0">
+                                 <children>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="50.0" prefWidth="107.0" text="Left" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="50.0" prefWidth="107.0" text="Maneuver" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="lblLeftManCtrlr" alignment="CENTER" prefHeight="50.0" prefWidth="107.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="lblLeftManComp" alignment="CENTER" prefHeight="50.0" prefWidth="107.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="lblLeftManTggl" alignment="CENTER" prefHeight="50.0" prefWidth="107.0" text="0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="42.0" prefWidth="91.0">
+                                       <children>
+                                          <Button fx:id="btnLeftManSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="90.0" text="Set Controller" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="104.0">
+                                       <children>
+                                          <Button fx:id="btnLeftManSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="105.0" text="Set Toggle" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutY="165.0" prefHeight="42.0" prefWidth="700.0">
+                                 <children>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="50.0" prefWidth="107.0" text="Left" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="50.0" prefWidth="107.0" text="Maneuver" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="lblRightManCtrlr" alignment="CENTER" prefHeight="50.0" prefWidth="107.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="lblRightManComp" alignment="CENTER" prefHeight="50.0" prefWidth="107.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="lblRightManTggl" alignment="CENTER" prefHeight="50.0" prefWidth="107.0" text="0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="42.0" prefWidth="91.0">
+                                       <children>
+                                          <Button fx:id="btnRightManSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="90.0" text="Set Controller" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="104.0">
+                                       <children>
+                                          <Button fx:id="btnRightManSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="105.0" text="Set Toggle" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutY="207.0" prefHeight="42.0" prefWidth="700.0">
+                                 <children>
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="50.0" prefWidth="107.0" text="Left" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="50.0" prefWidth="107.0" text="Maneuver" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="110.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="lblFwManCtrlr" alignment="CENTER" prefHeight="50.0" prefWidth="107.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="lblFwManComp" alignment="CENTER" prefHeight="50.0" prefWidth="107.0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="210.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label fx:id="lblFwManTggl" alignment="CENTER" prefHeight="50.0" prefWidth="107.0" text="0" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="42.0" prefWidth="91.0">
+                                       <children>
+                                          <Button fx:id="btnFwManSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="90.0" text="Set Controller" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="104.0">
+                                       <children>
+                                          <Button fx:id="btnFwManSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="105.0" text="Set Toggle" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutY="328.0" prefHeight="42.0" prefWidth="700.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="42.0" prefWidth="698.0">
+                                       <children>
+                                          <Button fx:id="btnSave" mnemonicParsing="false" prefHeight="42.0" prefWidth="109.0" text="Save" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
+               </children>
+            </Pane>
+         </center>   
+      </BorderPane>
+   </children>
+</AnchorPane>
