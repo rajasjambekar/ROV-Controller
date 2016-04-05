@@ -15,11 +15,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import net.java.games.input.Controller;
 
-public class ControllerGUI implements Runnable{
+public class ControllerGUI{
+	
+	@FXML MenuBar menuBar;
 	
 	@FXML MenuItem menuRediscover;
 	@FXML MenuItem menuControllerConfig;
@@ -32,18 +35,17 @@ public class ControllerGUI implements Runnable{
 	private List<String> lines;
 	private MenuItem[] configMmenuItemList;
 	private MenuItem[] enginesMmenuItemList;
-	private boolean threadEnable = false;
+	private ThreadEnable threadEnable;
 	private String configFile;
 	private String[] controllerTypeList;
 	private ArrayList<JoystickContainer> joystickContainerList;
+	DataAccumulator dataStore;
 	
 	@FXML
     private void initialize() {
 		configMmenuItemList = new MenuItem[] {menuRediscover, menuControllerConfig, menuQuit};
 		enginesMmenuItemList = new MenuItem[] {menuStartEngines, menuStopEngines};
 		setHandler();
-		//init non-fxml content
-		init();
     }
 	
 	private void setHandler() {
@@ -55,7 +57,8 @@ public class ControllerGUI implements Runnable{
 	}
 	
 	//init non-fxml content
-	private void init() {
+	public void init() {
+		threadEnable = new ThreadEnable();
 		controllerTypeList = new String[] {"Stick", "Keyboard", "Mouse", "Gamepad"};
 		reDiscoverControllers();
     	configFile = "Config.txt";
@@ -63,16 +66,6 @@ public class ControllerGUI implements Runnable{
     	if(!matchConfiguration())
     		openControllerConfiguration();
     }
-	
-	@Override
-	public void run() {
-		
-	}
-	
-	//runs thread which fetches latest sensor/component data and updates the UI
-	private void start() {
-		
-	}
 	
 	//handles save button press
 	final EventHandler<ActionEvent> configMenuHandler = new EventHandler<ActionEvent>(){
@@ -96,11 +89,11 @@ public class ControllerGUI implements Runnable{
           @Override
           public void handle(final ActionEvent event) {
           	MenuItem item = (MenuItem) event.getSource();
-          	if(item==menuStartEngines && !threadEnable) {
+          	if(item==menuStartEngines && !threadEnable.getThreadState()) {
           		startEngines();
           	}
-          	else if(item==menuStopEngines && threadEnable) {
-          		//stopEngines();
+          	else if(item==menuStopEngines && threadEnable.getThreadState()) {
+          		stopEngines();
           	}
           }
       };
@@ -111,11 +104,26 @@ public class ControllerGUI implements Runnable{
 		(new DiscoverControllers(this.connectedControllers)).discover();
 	}
 	
+	//stops threads started by startEngines like joystickInputReader, TCPReceiver, GUIUpdater
+	//changes boolean threadEnable to false
+	protected void stopEngines() {
+		threadEnable.setThreadState(false);
+		//close the tcp connection with arduino
+		//closeTcpConnection();
+	}
+
 	//starts threads for joystickInputReader, TCPReceiver, GUIUpdater
 	//passes boolean threadEnable to threads to control them from this class
 	private void startEngines() {
-		threadEnable = true;
+		//reads the latest configuration from the config file
+		readConfigurationFile();
+		//change the threadEnable state to true to allow running of threads
+		threadEnable.setThreadState(true);
+		//init a new dataStore object
+		dataStore = new DataAccumulator();
+		//create a new tcp connection with arduino
 		//startTcpConnection();
+		
 		initLists();
 		createControllerContainers();
 	}
@@ -136,7 +144,7 @@ public class ControllerGUI implements Runnable{
 					e.printStackTrace();
 				}
 				joystickContainerList.add(jc);
-				new Thread(new JoystickInputReader(jc, client)).start();
+				new Thread(new JoystickInputReader(jc, client, threadEnable, dataStore)).start();
 			}
 		}
 	}
@@ -180,8 +188,8 @@ public class ControllerGUI implements Runnable{
 			loader.setLocation(this.getClass().getResource("InputControlScheme.fxml"));
 			root = loader.load();
 			Stage stage = new Stage();
-			stage.setScene(new Scene(root, 700, 400));
-			stage.show();            
+			stage.setScene(new Scene(root, 1000, 600));
+			stage.show();
             ConfigurationUI configUI = loader.getController();
             configUI.init(connectedControllers);
 		} catch(Exception e) {
@@ -194,7 +202,7 @@ public class ControllerGUI implements Runnable{
 	private boolean matchConfiguration() {
 		for(int i=0;i<lines.size();i++) {
 			String parts[] = lines.get(i).split(":");
-			if(!connectedControllers.containsKey(parts[2]) && !checkEqualsControllerType(parts[2])) {
+			if(!connectedControllers.containsKey(parts[2])) {
 				return false;
 			}
 		}
