@@ -11,14 +11,18 @@ public class ManeuveringJoystick implements Runnable{
 	private int THRUSTER_STOP = 1500;	//thruster stop val
 	private int THRUSTER_FULL_FW = 1850;	//thruster full forward val
 	private int THRUSTER_FULL_BW = 1150;	//thruster full backward val
-	JoystickContainer jC;
+	private int thrusterValRange;	//Difference of thruster max and min value
+	private JoystickContainer jC;
 	private Socket client;
-	TCPSender tcpSender;
-	int thrusterValRange;	//Difference of thruster max and min value
+	private TCPSender tcpSender;
+	private ThreadEnable threadEnable;
+	private DataAccumulator dataStore;
 	
-	public ManeuveringJoystick(JoystickContainer jC, Socket client) {
+	public ManeuveringJoystick(JoystickContainer jC, Socket client, ThreadEnable threadEnable, DataAccumulator dataStore) {
 		this.jC = jC;
+		this.dataStore = dataStore;
 		this.client = client;
+		this.threadEnable = threadEnable;
 		try {
 			//tcpSender = new TCPSender(this.client);
 		} catch (Exception e) {
@@ -34,13 +38,18 @@ public class ManeuveringJoystick implements Runnable{
 	public void run() {
 		//check if controller is still connected
 		//Stop thread from executing if controller gets disconnected
-		//thread will restart when controller is rediscovered
 		//Also keep checking if controller contains task to maneuver rov
-		while(jC.getPoll() && jC.containsAxisTaskType("Maneuver")) {
+		while(threadEnable.getThreadState() && jC.getPoll()) {
 			setThrusterVal();
-			dispValues();
+			updateDataAccumulator();
+			dataStore.dispThrusterValues();
 			sleep(10);
 		}
+	}
+	
+	//updates the values on object of DataAccumulator
+	private void updateDataAccumulator() {
+		dataStore.setThrusterValues(thrusterVal);
 	}
 	
 	//gets the relevant axes data and calculates the corresponding thruster data
@@ -141,6 +150,7 @@ public class ManeuveringJoystick implements Runnable{
 	}
 	
 	private void setThrusterVal(int prevVal, float axisVal, int code, int dir, int pos) {
+		//convert button press val to appropriate val
 		if(axisVal==-2)	//thruster on
 			axisVal = 90;	//buttons are on off. So do not power thrusters to full value
 		else if(axisVal==-1)
