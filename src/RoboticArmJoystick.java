@@ -12,14 +12,18 @@ public class RoboticArmJoystick implements Runnable {
 	private int numMotors = 7;		//number of motors
 	private int stopVal = 0;		//Motor turn off
 	private int fullSpeedVal = 255;		//Motor running at full speed
+	private long axisTime;
 	private JoystickContainer jC;
 	private Socket client;
-	TCPSender tcpSender;
-	long axisTime;
+	private TCPSender tcpSender;
+	private ThreadEnable threadEnable;
+	private  DataAccumulator dataStore;
 	
-	public RoboticArmJoystick(JoystickContainer jC, Socket client) {
+	public RoboticArmJoystick(JoystickContainer jC, Socket client, ThreadEnable threadEnable, DataAccumulator dataStore) {
 		this.jC = jC;
+		this.dataStore = dataStore;
 		this.client = client;
+		this.threadEnable = threadEnable;
 		try {
 			//tcpSender = new TCPSender(this.client);
 		} catch (Exception e) {
@@ -37,11 +41,17 @@ public class RoboticArmJoystick implements Runnable {
 		//Stop thread from executing if controller gets disconnected
 		//thread will restart when controller is rediscovered
 		//Also keep checking if controller contains task to control roboticarm
-		while(jC.getPoll() && jC.containsAxisTaskType("RoboticArm")) {
+		while(threadEnable.getThreadState() && jC.getPoll()) {
 			setMotorVal();
-			dispValues();
+			updateDataAccumulator();
+			//dispValues();
 			sleep(10);
 		}
+	}
+	
+	//updates the values on object of DataAccumulator
+	private void updateDataAccumulator() {
+		dataStore.setMotorValues(motorVal);
 	}
 
 	//gets the relevant axes data and calculates the corresponding thruster data
