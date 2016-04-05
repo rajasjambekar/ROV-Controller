@@ -14,31 +14,41 @@ public class JoystickInputReader implements Runnable {
 	private Runnable mJ = null;
 	private Runnable rJ = null;
 	private Socket client;
-	TCPSender tcpSender;
+	private TCPSender tcpSender;
+	private ThreadEnable threadEnable;
+	private DataAccumulator dataStore;
 	
-	public JoystickInputReader(JoystickContainer jc, Socket client) {
+	public JoystickInputReader(JoystickContainer jc, Socket client, ThreadEnable threadEnable, DataAccumulator dataStore) {
 		this.jContainer = jc;
+		this.dataStore = dataStore;
 		this.client = client;
+		this.threadEnable = threadEnable;
 		checkTasks();
 	}
 	
+	//creates threads based on type of tasks
 	private void checkTasks() {
 		//check if this joystick controls maneuvering
 		if(jContainer.containsAxisTaskType("Maneuver")) {
-			Runnable mJ = new ManeuveringJoystick(jContainer, client);
+			Runnable mJ = new ManeuveringJoystick(jContainer, client, threadEnable, dataStore);
 			new Thread(mJ).start();
 		}
 		//check if this joystick controls robotic arm
-		else if(jContainer.containsAxisTaskType("RoboticArm")) {
-			Runnable rJ = new RoboticArmJoystick(jContainer, client);
+		if(jContainer.containsAxisTaskType("RoboticArm")) {
+			Runnable rJ = new RoboticArmJoystick(jContainer, client, threadEnable, dataStore);
 			new Thread(rJ).start();
+		}
+		//check if this joystick controls leds, camera servos, etc
+		if(jContainer.containsAxisTaskType("Led") || jContainer.containsAxisTaskType("CamServo")) {
+			Runnable mTJ = new MiscTaskJoystick(jContainer, client, threadEnable, dataStore);
+			new Thread(mTJ).start();
 		}
 	}
 
 	@Override
 	public void run() {
 		//Run while the controller is still connected
-		while(jContainer.getPoll()) {
+		while(threadEnable.getThreadState() && jContainer.getPoll()) {
 			//read raw data from controller
 			jContainer.readAxes();
 			jContainer.readButtons();
