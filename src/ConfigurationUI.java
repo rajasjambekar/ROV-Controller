@@ -46,6 +46,7 @@ public class ConfigurationUI {
     @FXML private Button btnFwManSetTggl;
     
     @FXML private Button btnSave;
+    @FXML private Button btnReset;
     
     @FXML MenuItem menuClose;
     @FXML MenuBar menuBar;
@@ -60,6 +61,19 @@ public class ConfigurationUI {
 	private Label[] toggleLabelList;
 	private ArrayList<Integer> codeList; //code list for tasks
 	private ArrayList<String> taskNameList; //code list for tasks
+	
+	@FXML
+    private void initialize() {
+		setControllerButtonList = new Button[] {btnLeftManSetCtrlr, btnRightManSetCtrlr, btnFwManSetCtrlr};
+		setToggleButtonList = new Button[] {btnLeftManSetTggl, btnRightManSetTggl, btnFwManSetTggl};
+		controllerLabelList = new Label[] {lblLeftManCtrlr, lblRightManCtrlr, lblFwManCtrlr};
+		componentLabelList = new Label[] {lblLeftManComp, lblRightManComp, lblFwManComp};
+		toggleLabelList = new Label[] {lblLeftManTggl, lblRightManTggl, lblFwManTggl};
+    	setButtonHandler1();
+    	setButtonHandler2();
+    	setButtonHandler3();
+    	menuClose.setOnAction(menuHandler);
+    }
 	
 	public void init(HashMap<String,Controller> connectedControllers) {
     	this.connectedControllers = connectedControllers;
@@ -83,19 +97,6 @@ public class ConfigurationUI {
 		}
 	}
 	
-	@FXML
-    private void initialize() {
-		setControllerButtonList = new Button[] {btnLeftManSetCtrlr, btnRightManSetCtrlr, btnFwManSetCtrlr};
-		setToggleButtonList = new Button[] {btnLeftManSetTggl, btnRightManSetTggl, btnFwManSetTggl};
-		controllerLabelList = new Label[] {lblLeftManCtrlr, lblRightManCtrlr, lblFwManCtrlr};
-		componentLabelList = new Label[] {lblLeftManComp, lblRightManComp, lblFwManComp};
-		toggleLabelList = new Label[] {lblLeftManTggl, lblRightManTggl, lblFwManTggl};
-    	setButtonHandler1();
-    	setButtonHandler2();
-    	setButtonHandler3();
-    	menuClose.setOnAction(menuHandler);
-    }
-	
 	//for setController buttons
 	private void setButtonHandler1() {
 		btnLeftManSetCtrlr.setOnAction(setControllerHandler);
@@ -112,19 +113,24 @@ public class ConfigurationUI {
 	
 	//for save button
 	private void setButtonHandler3() {
-		btnSave.setOnAction(saveConfigHandler);
+		btnSave.setOnAction(extraConfigHandler);
+		btnReset.setOnAction(extraConfigHandler);
 	}
 	
 	//handles save button press
-	final EventHandler<ActionEvent> saveConfigHandler = new EventHandler<ActionEvent>(){
+	final EventHandler<ActionEvent> extraConfigHandler = new EventHandler<ActionEvent>(){
         @Override
         public void handle(final ActionEvent event) {
-        	try {
-				writeControlConfig();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        	if((Button) event.getSource()==btnSave) {
+            	try {
+    				writeControlConfig();
+    			} catch (Exception e) {
+    				e.printStackTrace();
+    			}
+        	}
+        	else if((Button) event.getSource()==btnReset) {
+        		resetAll();
+        	}
         }
     };
     
@@ -157,6 +163,15 @@ public class ConfigurationUI {
   			}
   		}
   	};
+  	
+  	//resets all labels on UI
+  	private void resetAll() {
+  		for(int i=0;i<controllerLabelList.length;i++) {
+  			controllerLabelList[i].setText("Unassigned");
+  			componentLabelList[i].setText("Unassigned");
+  			toggleLabelList[i].setText("0");		
+  		}
+  	}
     
     //writes the new configuration to file
     private void writeControlConfig() throws IOException {
@@ -207,6 +222,11 @@ public class ConfigurationUI {
 				if(compName!="") {
 					//check if this button has been attached as toggle button previously
 					if(compName.contains("BUTTON") && !checkAssignedToggleButton(i, compName.substring(6))) {
+						name.setText(controllerChooser.getValue().toString());
+						comp.setText(compName);
+						break;
+					}
+					else {
 						name.setText(controllerChooser.getValue().toString());
 						comp.setText(compName);
 						break;
@@ -275,6 +295,12 @@ public class ConfigurationUI {
     			//check if this button has been attached as normal button previously
     			if(toggleButton.contains("BUTTON") && !checkAssignedButton(i, toggleButton.substring(6))) {
 					String str = toggleButton.substring(6);
+					System.out.println(str.toString());
+					if(tggl!=null)
+						tggl.setText(str.toString());
+				}
+    			else {
+    				String str = toggleButton.substring(6);
 					System.out.println(str.toString());
 					if(tggl!=null)
 						tggl.setText(str.toString());
