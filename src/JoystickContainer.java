@@ -38,21 +38,6 @@ public class JoystickContainer {
 		axisTaskList = new ArrayList<AxisTask>();
 		buttonTaskList = new ArrayList<ButtonTask>();
 		setComponentList();
-		//addTask(new Task("Maneuver",0,0));
-		/*addTask(new Task("RoboticArmPAN-",4100,0));
-		addTask(new Task("RoboticArmPAN+",4101,0));
-		addTask(new Task("RoboticArmFWBW-",4200,0));
-		addTask(new Task("RoboticArmFWBW+",4201,0));
-		addTask(new Task("RoboticArmUPDN-",4300,0));
-		addTask(new Task("RoboticArmUPDN+",4301,0));
-		addTask(new Task("360Degree-",4400,1));
-		addTask(new Task("360Degree+",4401,2));
-		addTask(new Task("180Degree-",4500,3));
-		addTask(new Task("180Degree+",4501,4));
-		addTask(new Task("Gripper-",4600,5));
-		addTask(new Task("Gripper+",4601,6));
-		addTask(new Task("Claw-",4700,7));
-		addTask(new Task("Claw+",4701,8));*/
 	}
 	
 	//displays current val of all axes and buttons
