@@ -13,7 +13,7 @@
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
-        <Menu mnemonicParsing="false" text="Configurations">
+        <Menu fx:id="manuBar" mnemonicParsing="false" text="Configurations">
           <items>
             <MenuItem fx:id="menuRediscover" mnemonicParsing="false" text="Re-Discover Controllers" />
             <MenuItem fx:id="menuControllerConfig" mnemonicParsing="false" text="Configure Controllers" />
