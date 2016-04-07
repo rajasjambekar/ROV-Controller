@@ -149,7 +149,6 @@ public class JoystickContainer {
 	//add task to axisTaskList
 	public void addAxisTask(AxisTask t) {
 		axisTaskList.add(t);
-		//System.out.println(t.getTaskName() + " " + t.getTaskType() + " " + t.getAxisNumber() + " " + t.getToggleButtonNumber() + " " + t.getCode());
 	}
 	
 	//add task to buttonTaskList
@@ -202,7 +201,7 @@ public class JoystickContainer {
 	//check whether axisTaskList contains task type
 	public boolean containsAxisTaskType(String taskType) {
 		for(AxisTask t: axisTaskList) {
-			System.out.println(t.getTaskType());
+			//System.out.println(t.getTaskType());
 			if(t.getTaskType().equalsIgnoreCase(taskType)) {
 				return true;
 			}
@@ -212,7 +211,9 @@ public class JoystickContainer {
 	
 	//check whether buttonTaskList contains task type
 	public boolean containsButtonTaskType(String taskType) {
+		//System.out.println(buttonTaskList.size());
 		for(ButtonTask t: buttonTaskList) {
+			//System.out.println(t.getTaskType());
 			if(t.getTaskType().equalsIgnoreCase(taskType)) {
 				return true;
 			}
@@ -366,5 +367,14 @@ public class JoystickContainer {
 	//returns connected controller
 	public Controller getController() {
 		return joystick;
+	}
+	
+	//returns the number of tasks assigned.
+	//returns 0 if no tasks assigned
+	public int getTaskCount() {
+		int count = 0;
+		count += axisTaskList.size();
+		count += buttonTaskList.size();
+		return count;
 	}
 }
