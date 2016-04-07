@@ -29,17 +29,18 @@ public class JoystickInputReader implements Runnable {
 	//creates threads based on type of tasks
 	private void checkTasks() {
 		//check if this joystick controls maneuvering
-		if(jContainer.containsAxisTaskType("Maneuver")) {
+		if(jContainer.containsAxisTaskType("Maneuver") || jContainer.containsButtonTaskType("Maneuver")) {
 			Runnable mJ = new ManeuveringJoystick(jContainer, client, threadEnable, dataStore);
 			new Thread(mJ).start();
 		}
 		//check if this joystick controls robotic arm
-		if(jContainer.containsAxisTaskType("RoboticArm")) {
+		if(jContainer.containsAxisTaskType("RoboticArm") || jContainer.containsButtonTaskType("RoboticArm")) {
 			Runnable rJ = new RoboticArmJoystick(jContainer, client, threadEnable, dataStore);
 			new Thread(rJ).start();
 		}
 		//check if this joystick controls leds, camera servos, etc
-		if(jContainer.containsAxisTaskType("Led") || jContainer.containsAxisTaskType("CamServo")) {
+		if(jContainer.containsAxisTaskType("Led") || jContainer.containsAxisTaskType("CamServo")
+				|| jContainer.containsButtonTaskType("Led") || jContainer.containsButtonTaskType("CamServo")) {
 			Runnable mTJ = new MiscTaskJoystick(jContainer, client, threadEnable, dataStore);
 			new Thread(mTJ).start();
 		}
@@ -53,7 +54,7 @@ public class JoystickInputReader implements Runnable {
 			jContainer.readAxes();
 			jContainer.readButtons();
 			//jContainer.dispValues();
-			//sleep(10);
+			//sleep(100);
 		}
 	}
 
