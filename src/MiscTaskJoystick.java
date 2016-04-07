@@ -183,26 +183,38 @@ public class MiscTaskJoystick implements Runnable{
 	private void setLedVal(int ledNo, float newVal, int code) {
 		if(ledNo<=noLed) {
 			//-1 is set as button not pressed value in setVal
-			//0 is the value when joystick 
+			//50 is the value when joystick is at rest
 			//check if led button/axis has returned to default position before toggle led
 			if(ledNo==1) {
-				if(newVal==-1 || newVal==0) {
+				//button not pressed value or joystick stick at rest position value
+				if(newVal==-1 || newVal==50) {
 					led1ZeroValTracker = true;
 				}
 				else if(led1ZeroValTracker){
 					led1ZeroValTracker = false;
 					ledArray1 = !ledArray1;
-					//tcpSender.sendData(code, ledArray1);
+					if(ledArray1) {
+						//tcpSender.sendData(code, 1);
+					}
+					else {
+						//tcpSender.sendData(code, 0);
+					}
 				}
 			}
 			else if(ledNo==2) {
-				if(newVal==-1 || newVal==0) {
+				//button not pressed value or joystick stick at rest position value
+				if(newVal==-1 || newVal==50) {
 					led2ZeroValTracker = true;
 				}
 				else if(led2ZeroValTracker){
 					led2ZeroValTracker = false;
 					ledArray2 = !ledArray2;
-					//tcpSender.sendData(code, ledArray2);
+					if(ledArray2) {
+						//tcpSender.sendData(code, 1);
+					}
+					else {
+						//tcpSender.sendData(code, 0);
+					}
 				}
 			}
 		}
