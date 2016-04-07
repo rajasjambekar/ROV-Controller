@@ -220,23 +220,43 @@ public class MiscTaskJoystick implements Runnable{
 		}
 	}
 
+	//rounds off newVal by subtracting last digit
 	private void setCamServoVal(int camNo, int servoNo, float newVal, int code, int dir) {
+		//will be -1/-2 if button triggered task
 		if(newVal>=0) {
+			//convert % to angle
 			int newAngle = minServoAngle + (int) ((newVal/100)*(maxServoAngle - minServoAngle));
+			
+			//round of angle
 			if(newAngle<(maxServoAngle - minServoAngle)/2 - 5)
-				newAngle -= newAngle/10;
+				newAngle -= newAngle%10;
 			else if(newAngle>(maxServoAngle - minServoAngle)/2 + 5)
-				newAngle += newAngle/10;
+				newAngle += newAngle%10;
 			else if(newAngle>=((maxServoAngle - minServoAngle)/2 - 5) && newAngle<=((maxServoAngle - minServoAngle)/2 + 5))
 				newAngle = (maxServoAngle - minServoAngle)/2;
 			
-			if(camNo==1 && servoNo<cam1Servo.length && newAngle>=0 && cam1Servo[servoNo]!=newAngle) {
-				cam1Servo[servoNo] = newAngle;
-				//tcpSender.sendData(code, cam1Servo[servoNo]);
+			if(camNo==1 && servoNo<cam1Servo.length) {
+				//if dir == 1 reduce value
+				if(dir==1 && cam1Servo[servoNo]>=servoAngleJump && newAngle<=50) {
+					cam1Servo[servoNo] -= servoAngleJump;
+					//tcpSender.sendData(code, cam1Servo[servoNo]);
+				}
+				//if dir == 2 increment value
+				else if(dir==2 && cam1Servo[servoNo]<=(180-servoAngleJump) && newAngle>=130) {
+					cam1Servo[servoNo] += servoAngleJump;
+					//tcpSender.sendData(code, cam1Servo[servoNo]);
+				}
+
 			}
-			else if(camNo==2 && servoNo<cam2Servo.length && newAngle>=0 && cam2Servo[servoNo]!=newAngle) {
-				cam2Servo[servoNo] = newAngle;
-				//tcpSender.sendData(code, cam2Servo[servoNo]);
+			else if(camNo==2 && servoNo<cam2Servo.length) {
+				if(dir==1 && cam2Servo[servoNo]>=servoAngleJump && newAngle<=50) {
+					cam2Servo[servoNo] -= servoAngleJump;
+					//tcpSender.sendData(code, cam2Servo[servoNo]);
+				}
+				else if(dir==2 && cam2Servo[servoNo]<=(180-servoAngleJump) && newAngle>=130) {
+					cam2Servo[servoNo] += servoAngleJump;
+					//tcpSender.sendData(code, cam2Servo[servoNo]);
+				}
 			}
 		}
 		else {
@@ -244,23 +264,23 @@ public class MiscTaskJoystick implements Runnable{
 				//button pressed
 				if(dir==1) {
 					//min
-					if(camNo==1 && servoNo<cam1Servo.length && cam1Servo[servoNo]>=minServoAngle+10) {
-						cam1Servo[servoNo] -= 10;
+					if(camNo==1 && servoNo<cam1Servo.length && cam1Servo[servoNo]>=minServoAngle+servoAngleJump) {
+						cam1Servo[servoNo] -= servoAngleJump;
 						//tcpSender.sendData(code, cam1Servo[servoNo]);
 					}
-					else if(camNo==2 && servoNo<cam2Servo.length && cam2Servo[servoNo]>=minServoAngle+10) {
-						cam2Servo[servoNo] -= 10;
+					else if(camNo==2 && servoNo<cam2Servo.length && cam2Servo[servoNo]>=minServoAngle+servoAngleJump) {
+						cam2Servo[servoNo] -= servoAngleJump;
 						//tcpSender.sendData(code, cam2Servo[servoNo]);
 					}
 				}
 				else if(dir==2) {
 					//max
-					if(camNo==1 && servoNo<cam1Servo.length && cam1Servo[servoNo]<=maxServoAngle-10) {
-						cam1Servo[servoNo] += 10;
+					if(camNo==1 && servoNo<cam1Servo.length && cam1Servo[servoNo]<=maxServoAngle-servoAngleJump) {
+						cam1Servo[servoNo] += servoAngleJump;
 						//tcpSender.sendData(code, cam1Servo[servoNo]);
 					}
-					else if(camNo==2 && servoNo<cam2Servo.length && cam2Servo[servoNo]<=maxServoAngle-10) {
-						cam2Servo[servoNo] += 10;
+					else if(camNo==2 && servoNo<cam2Servo.length && cam2Servo[servoNo]<=maxServoAngle-servoAngleJump) {
+						cam2Servo[servoNo] += servoAngleJump;
 						//tcpSender.sendData(code, cam2Servo[servoNo]);
 					}
 				}
