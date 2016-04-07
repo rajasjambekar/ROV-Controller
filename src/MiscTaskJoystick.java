@@ -18,6 +18,16 @@ public class MiscTaskJoystick implements Runnable{
 	private int noLed = 2;
 	private int[] cam1Servo;	//servos for camera1	- pan,tilt
 	private int[] cam2Servo;	//servos for camera2	- pan,tilt
+	private int servoAngleJump = 10;	//jump 10degrees for change in servo angle
+	private long c1s1LTimer;	//timers to check time since last command
+	private long c1s1RTimer;
+	private long c1s2LTimer;
+	private long c1s2RTimer;
+	private long c2s1LTimer;
+	private long c2s1RTimer;
+	private long c2s2LTimer;
+	private long c2s2RTimer;
+	private long timeGap = 500;	//time gap for abv timers
 	private int noCams = 2;		//number of cameras used
 	private int cam1ServoCount = 2;		//no of servos on cam1
 	private int cam2ServoCount = 2;		//no of servos on cam2
@@ -42,6 +52,14 @@ public class MiscTaskJoystick implements Runnable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		c1s1LTimer = System.currentTimeMillis();
+		c1s1RTimer = System.currentTimeMillis();
+		c1s2LTimer = System.currentTimeMillis();
+		c1s2RTimer = System.currentTimeMillis();
+		c2s1LTimer = System.currentTimeMillis();
+		c2s1RTimer = System.currentTimeMillis();
+		c2s2LTimer = System.currentTimeMillis();
+		c2s2RTimer = System.currentTimeMillis();
 		
 	}
 
@@ -112,38 +130,47 @@ public class MiscTaskJoystick implements Runnable{
 		}
 	}
 	
+	//categorizes the task by taskname and direction and checks time since last check
 	private void calVal(String taskName, float newVal, int code) {
-		if(taskName.equalsIgnoreCase("C1S1_LEFT")) {
+		if(taskName.equalsIgnoreCase("C1S1_LEFT") && System.currentTimeMillis()-c1s1LTimer>timeGap) {
+			int dir = 1;
+			setCamServoVal(1, 0, newVal, code, dir);
+			c1s1LTimer = System.currentTimeMillis();
+		}
+		else if(taskName.equalsIgnoreCase("C1S1_RIGHT") && System.currentTimeMillis()-c1s1RTimer>timeGap) {
+			int dir = 2;
+			setCamServoVal(1, 0, newVal, code, dir);
+			c1s1RTimer = System.currentTimeMillis();
+		}
+		else if(taskName.equalsIgnoreCase("C1S2_DOWN") && System.currentTimeMillis()-c1s2LTimer>timeGap) {
 			int dir = 1;
 			setCamServoVal(1, 1, newVal, code, dir);
+			c1s2LTimer = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("C1S1_RIGHT")) {
+		else if(taskName.equalsIgnoreCase("C1S2_UP") && System.currentTimeMillis()-c1s2RTimer>timeGap) {
 			int dir = 2;
 			setCamServoVal(1, 1, newVal, code, dir);
+			c1s2RTimer = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("C1S2_LEFT")) {
+		else if(taskName.equalsIgnoreCase("C2S1_LEFT") && (System.currentTimeMillis()-c2s1LTimer)>timeGap) {
 			int dir = 1;
-			setCamServoVal(1, 1, newVal, code, dir);
+			setCamServoVal(2, 0, newVal, code, dir);
+			c2s1LTimer = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("C1S2_RIGHT")) {
+		else if(taskName.equalsIgnoreCase("C2S1_RIGHT") && System.currentTimeMillis()-c2s1RTimer>timeGap) {
 			int dir = 2;
-			setCamServoVal(1, 1, newVal, code, dir);
+			setCamServoVal(2, 0, newVal, code, dir);
+			c2s1RTimer = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("C2S1_LEFT")) {
+		else if(taskName.equalsIgnoreCase("C2S2_DOWN") && System.currentTimeMillis()-c2s2LTimer>timeGap) {
 			int dir = 1;
-			setCamServoVal(1, 1, newVal, code, dir);
+			setCamServoVal(2, 1, newVal, code, dir);
+			c2s2LTimer = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("C2S1_RIGHT")) {
+		else if(taskName.equalsIgnoreCase("C2S2_UP") && System.currentTimeMillis()-c2s2RTimer>timeGap) {
 			int dir = 2;
-			setCamServoVal(1, 1, newVal, code, dir);
-		}
-		else if(taskName.equalsIgnoreCase("C2S2_LEFT")) {
-			int dir = 1;
-			setCamServoVal(1, 1, newVal, code, dir);
-		}
-		else if(taskName.equalsIgnoreCase("C2S2_RIGHT")) {
-			int dir = 2;
-			setCamServoVal(1, 1, newVal, code, dir);
+			setCamServoVal(2, 1, newVal, code, dir);
+			c2s2RTimer = System.currentTimeMillis();
 		}
 		else if(taskName.equalsIgnoreCase("LED1")) {
 			setLedVal(1, newVal, code);
