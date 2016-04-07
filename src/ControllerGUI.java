@@ -119,14 +119,14 @@ public class ControllerGUI{
 	//starts threads for joystickInputReader, TCPReceiver, GUIUpdater
 	//passes boolean threadEnable to threads to control them from this class
 	private void startEngines() {
+		//create a new tcp connection with arduino
+		//startTcpConnection();
 		//reads the latest configuration from the config file
 		readConfigurationFile();
 		//change the threadEnable state to true to allow running of threads
 		threadEnable.setThreadState(true);
 		//init a new dataStore object
 		dataStore = new DataAccumulator();
-		//create a new tcp connection with arduino
-		//startTcpConnection();
 		
 		initLists();
 		createControllerContainers();
@@ -178,9 +178,9 @@ public class ControllerGUI{
 			}
 			else if(parts[3].contains("BUTTON")) {
 				String name = parts[6];
-				String type = parts[2];
+				String type = parts[1];
 				int code = Integer.parseInt(parts[5]);
-				int buttonNo = Integer.parseInt(parts[3].substring(4));
+				int buttonNo = Integer.parseInt(parts[3].substring(6));
 				ButtonTask task = new ButtonTask(name, type, code, buttonNo);
 				jc.addButtonTask(task);
 			}
@@ -195,7 +195,7 @@ public class ControllerGUI{
 			loader.setLocation(this.getClass().getResource("InputControlScheme.fxml"));
 			root = loader.load();
 			Stage stage = new Stage();
-			stage.setScene(new Scene(root, 1000, 600));
+			stage.setScene(new Scene(root, 1000, 700));
 			stage.show();
             ConfigurationUI configUI = loader.getController();
             configUI.init(connectedControllers);
@@ -208,9 +208,12 @@ public class ControllerGUI{
 	//if controllers are missing then open controllerConfigurationUI
 	private boolean matchConfiguration() {
 		for(int i=0;i<lines.size();i++) {
-			String parts[] = lines.get(i).split(":");
-			if(!connectedControllers.containsKey(parts[2])) {
-				return false;
+			String parts[] = null;
+			if(lines.get(i).contains(":")) {
+				parts = lines.get(i).split(":");
+				if(!connectedControllers.containsKey(parts[2]) && !parts[2].equalsIgnoreCase("Unassigned")) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -240,7 +243,7 @@ public class ControllerGUI{
 	
 	//start tcp connection
 	private void startTcpConnection(){
-	   String serverName = "192.168.1.177";
+	   String serverName = "192.168.0.102";
 	   int port = 23;
 	   System.out.println("Connecting to " + serverName +" on port " + port);
 	   try {
