@@ -154,4 +154,19 @@ public class DataAccumulator {
 			System.out.println("Motor " + (i+1) + ": " + motorVal[i]);
 		}
 	}
+	
+	//displays all motor values
+	public void dispServoValues() {
+		for(int i=0;i<cam1Servo.length;i++) {
+			System.out.println("Camera 1 Servo " + (i+1) + ": " + cam1Servo[i]);
+		}
+		for(int i=0;i<cam2Servo.length;i++) {
+			System.out.println("Camera 2 Servo " + (i+1) + ": " + cam2Servo[i]);
+		}
+	}
+	
+	//displays led value
+	public void dispLed() {
+		System.out.println("LED1: " + ledArray1 + " " + " LED2: " + ledArray2);
+	}
 }
