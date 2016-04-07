@@ -80,7 +80,9 @@ public class ControllerGUI{
         	else if(item==menuControllerConfig && !threadEnable.getThreadState()) {
         		openControllerConfiguration();
         	}
+        	//shut down threads before exit
         	else if(item==menuQuit) {
+        		stopEngines();
         		Platform.exit();
         	}
         }
