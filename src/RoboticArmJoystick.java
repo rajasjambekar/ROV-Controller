@@ -44,14 +44,20 @@ public class RoboticArmJoystick implements Runnable {
 		while(threadEnable.getThreadState() && jC.getPoll()) {
 			setMotorVal();
 			updateDataAccumulator();
-			//dispValues();
+			dataStore.dispMotorValues();
 			sleep(10);
 		}
+		//send stop values to arduino immediately
+		System.out.println("Stopping Motors");
+		sendStopVal();
+		//update values in dataAccumulator one last time
+		updateDataAccumulator();
 	}
 	
 	//updates the values on object of DataAccumulator
 	private void updateDataAccumulator() {
 		dataStore.setMotorValues(motorVal);
+		dataStore.dispMotorValues();
 	}
 
 	//gets the relevant axes data and calculates the corresponding thruster data
@@ -238,6 +244,27 @@ public class RoboticArmJoystick implements Runnable {
 			TimeUnit.MILLISECONDS.sleep(i);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	//send command to stop motors
+	private void sendStopVal() {
+		stopMotors();
+		ArrayList<AxisTask> axisTaskList = jC.getAxisTaskList();
+		for(AxisTask task: axisTaskList) {
+			if(task.getTaskType().equalsIgnoreCase("RoboticArm")) {
+				int code = task.getCode();
+				//tcpSender.sendData(code, stopVal);
+				sleep(10);
+			}
+		}
+		ArrayList<ButtonTask> buttonTaskList = jC.getButtonTaskList();
+		for(ButtonTask task: buttonTaskList) {
+			if(task.getTaskType().equalsIgnoreCase("RoboticArm") && !task.getTaskName().equalsIgnoreCase("Toggle")) {
+				int code = task.getCode();
+				//tcpSender.sendData(code, stopVal);
+				sleep(10);
+			}
 		}
 	}
 }
