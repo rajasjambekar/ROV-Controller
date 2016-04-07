@@ -72,10 +72,12 @@ public class ControllerGUI{
         @Override
         public void handle(final ActionEvent event) {
         	MenuItem item = (MenuItem) event.getSource();
-        	if(item==menuRediscover) {
+        	//Do not allow rediscovery of controllers when threads are running
+        	if(item==menuRediscover && !threadEnable.getThreadState()) {
         		reDiscoverControllers();
         	}
-        	else if(item==menuControllerConfig) {
+        	//Do not allow configuration of controllers when threads are running
+        	else if(item==menuControllerConfig && !threadEnable.getThreadState()) {
         		openControllerConfiguration();
         	}
         	else if(item==menuQuit) {
