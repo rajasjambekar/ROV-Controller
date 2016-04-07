@@ -45,6 +45,12 @@ public class ManeuveringJoystick implements Runnable{
 			dataStore.dispThrusterValues();
 			sleep(10);
 		}
+		//send stop values to arduino immediately
+		System.out.println("Stopping Thrusters");
+		sendStopVal();
+		//update values in dataAccumulator one last time
+		updateDataAccumulator();
+		dataStore.dispThrusterValues();
 	}
 	
 	//updates the values on object of DataAccumulator
@@ -205,6 +211,27 @@ public class ManeuveringJoystick implements Runnable{
 			TimeUnit.MILLISECONDS.sleep(i);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	//sends commands to stop all thrusters
+	private void sendStopVal() {
+		stopThrusters();
+		ArrayList<AxisTask> axisTaskList = jC.getAxisTaskList();
+		for(AxisTask task: axisTaskList) {
+			if(task.getTaskType().equalsIgnoreCase("Maneuver")) {
+				int code = task.getCode();
+				//tcpSender.sendData(code, THRUSTER_STOP);
+				sleep(10);
+			}
+		}
+		ArrayList<ButtonTask> buttonTaskList = jC.getButtonTaskList();
+		for(ButtonTask task: buttonTaskList) {
+			if(task.getTaskType().equalsIgnoreCase("Maneuver") && !task.getTaskName().equalsIgnoreCase("Toggle")) {
+				int code = task.getCode();
+				//tcpSender.sendData(code, THRUSTER_STOP);
+				sleep(10);
+			}
 		}
 	}
 }
