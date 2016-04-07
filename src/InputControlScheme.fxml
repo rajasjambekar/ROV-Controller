@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1000" maxWidth="1000" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ConfigurationUI">
+<AnchorPane maxHeight="1000" maxWidth="1000" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ConfigurationUI">
    <children>
       <MenuBar fx:id="menuBar" prefHeight="25.0" prefWidth="1000.0">
         <menus>
@@ -45,9 +45,9 @@
             </VBox>
          </children>
       </HBox>
-      <ScrollPane layoutY="110.0" prefHeight="381.0" prefWidth="1000.0">
+      <ScrollPane layoutY="110.0" prefHeight="450.0" prefWidth="1000.0">
          <content>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="488.0" prefWidth="984.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1500.0" prefWidth="984.0">
                <children>
                   <HBox layoutY="81.0" prefHeight="42.0" prefWidth="985.0">
                      <children>
@@ -408,22 +408,958 @@
                         </VBox>
                         <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
                            <children>
-                              <Label fx:id="lblRtClkManComp1" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                              <Label fx:id="lblRtClkManComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
                            </children>
                         </VBox>
                         <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
                            <children>
-                              <Label fx:id="lblRtClkManTggl1" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                              <Label fx:id="lblRtClkManTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
                            </children>
                         </VBox>
                         <VBox prefHeight="42.0" prefWidth="123.0">
                            <children>
-                              <Button fx:id="btnRtClkManSetCtrlr1" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                              <Button fx:id="btnRtClkManSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
                            </children>
                         </VBox>
                         <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
                            <children>
-                              <Button fx:id="btnRtClkManSetTggl1" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                              <Button fx:id="btnRtClkManSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="459.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Pan Left" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblLeftRArmCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblLeftRArmComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblLeftRArmTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnLeftRArmSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnLeftRArmSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="501.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Pan Right" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblRightRArmCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblRightRArmComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblRightRArmTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnRightRArmSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnRightRArmSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="543.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Forward" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblFwRArmCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblFwRArmComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblFwRArmTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnFwRArmSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnFwRArmSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="585.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Backward" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblBwRArmCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblBwRArmComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblBwRArmTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnBwRArmSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnBwRArmSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="627.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Tilt Down" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblDnRArmCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblDnRArmComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblDnRArmTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnDnRArmSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnDnRArmSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="669.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Tilt Up" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblUpRArmCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblUpRArmComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblUpRArmTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnUpRArmSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnUpRArmSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="711.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Gripper Rotate 360 Left" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblRtLeftRGripperCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblRtLeftRGripperComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblRtLeftRGripperTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnRtLeftRGripperSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnRtLeftRGripperSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="753.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Gripper Rotate 360 Right" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblRtRightRGripperCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblRtRightRGripperComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblRtRightRGripperTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnRtRightRGripperSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnRtRightRGripperSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="795.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Gripper Tilt 180 Down" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblTiltDnRGripperCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblTiltDnRGripperComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblTiltDnRGripperTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnTiltDnRGripperSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnTiltDnRGripperSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="837.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Gripper Tilt 180 Up" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblTiltUpRGripperCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblTiltUpRGripperComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblTiltUpRGripperTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnTiltUpRGripperSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnTiltUpRGripperSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="879.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Gripper Close" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblCloseRGripperCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblCloseRGripperComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblCloseRGripperTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnCloseRGripperSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnCloseRGripperSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="921.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Robotic Arm Gripper Open" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblOpenRGripperCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblOpenRGripperComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblOpenRGripperTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnOpenRGripperSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnOpenRGripperSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="963.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Claw Close" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblCloseClawCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblCloseClawComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblCloseClawTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnCloseClawSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnCloseClawSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1005.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Claw Open" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="RoboticArm" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblOpenClawCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblOpenClawComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblOpenClawTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnOpenClawSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnOpenClawSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1047.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Camera1 Servo Pan Left" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="CamServo" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblC1S1LeftCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblC1S1LeftComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblC1S1LeftTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnC1S1LeftSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnC1S1LeftSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1089.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Camera1 Servo Pan Right" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="CamServo" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblC1S1RightCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblC1S1RightComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblC1S1RightTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnC1S1RightSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnC1S1RightSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1131.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Camera1 Servo Tilt Down" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="CamServo" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblC1S2DnCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblC1S2DnComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblC1S2DnTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnC1S2DnSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnC1S2DnSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1173.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Camera1 Servo Tilt Up" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="CamServo" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblC1S2UpCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblC1S2UpComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblC1S2UpTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnC1S2UpSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnC1S2UpSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1215.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Camera2 Servo Pan Left" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="CamServo" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblC2S1LeftCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblC2S1LeftComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblC2S1LeftTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnC2S1LeftSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnC2S1LeftSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1257.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Camera2 Servo Pan Right" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="CamServo" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblC2S1RightCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblC2S1RightComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblC2S1RightTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnC2S1RightSetCtrlr2" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnC2S1RightSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1299.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Camera2 Servo Tilt Down" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="CamServo" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblC2S2DnCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblC2S2DnComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblC2S2DnTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnC2S2DnSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnC2S2DnSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1341.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="Camera2 Servo Tilt Up" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="CamServo" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblC2S2UpCtrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblC2S2UpComp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblC2S2UpTggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnC2S2UpSetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnC2S2UpSetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1383.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="LED1 On/Off" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="Led" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblLed1Ctrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblLed1Comp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblLed1Tggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnLed1SetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnLed1SetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutY="1425.0" prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <VBox prefHeight="42.0" prefWidth="127.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="131.0" text="LED2 On/Off" textAlignment="CENTER" wrapText="true" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="109.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="42.0" prefWidth="117.0" text="Led" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="110.0" layoutY="10.0" prefHeight="42.0" prefWidth="249.0">
+                           <children>
+                              <Label fx:id="lblLed2Ctrlr" alignment="CENTER" prefHeight="42.0" prefWidth="264.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="113.0">
+                           <children>
+                              <Label fx:id="lblLed2Comp" alignment="CENTER" prefHeight="42.0" prefWidth="135.0" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="210.0" layoutY="10.0" prefHeight="42.0" prefWidth="134.0">
+                           <children>
+                              <Label fx:id="lblLed2Tggl" alignment="CENTER" prefHeight="42.0" prefWidth="144.0" text="0" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="42.0" prefWidth="123.0">
+                           <children>
+                              <Button fx:id="btnLed2SetCtrlr" mnemonicParsing="false" prefHeight="42.0" prefWidth="136.0" text="Set Controller" />
+                           </children>
+                        </VBox>
+                        <VBox layoutX="410.0" layoutY="10.0" prefHeight="42.0" prefWidth="132.0">
+                           <children>
+                              <Button fx:id="btnLed2SetTggl" mnemonicParsing="false" prefHeight="42.0" prefWidth="172.0" text="Set Toggle" />
                            </children>
                         </VBox>
                      </children>
@@ -432,7 +1368,7 @@
             </AnchorPane>
          </content>
       </ScrollPane>
-      <HBox layoutY="544.0" prefHeight="42.0" prefWidth="1000.0">
+      <HBox layoutY="650.0" prefHeight="42.0" prefWidth="1000.0">
          <children>
             <VBox alignment="CENTER_RIGHT" prefHeight="42.0" prefWidth="1000.0">
                <children>
