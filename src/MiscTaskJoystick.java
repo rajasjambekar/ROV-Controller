@@ -4,18 +4,23 @@ import java.util.concurrent.TimeUnit;
 
 /*
  * This thread will perform the misc tasks such as camera servo control, led control, etc
+ * The reading and setting of new servo values is done with a one second interval
+ * This is because the joystick analog input is very sensitive and does not react well to 
+ * incremental/decremental value change
+ * Each servo direction is associated with a timer which is checks the timegap between each read
  */
 public class MiscTaskJoystick implements Runnable{
 	
 	private JoystickContainer jC;
 	private Socket client;
+	private TCPSender tcpSender;
 	private ThreadEnable threadEnable;
 	private DataAccumulator dataStore;
-	private boolean ledArray1;
-	private boolean ledArray2;
+	private boolean ledArray1;			//led1 on/off toggle
+	private boolean ledArray2;			//led2 on/off toggle
 	private boolean led1ZeroValTracker; //checks if button released/axis value 0 before toggle led
 	private boolean led2ZeroValTracker; //checks if button released/axis value 0 before toggle led
-	private int noLed = 2;
+	private int noLed = 2;				//number of leds
 	private int[] cam1Servo;	//servos for camera1	- pan,tilt
 	private int[] cam2Servo;	//servos for camera2	- pan,tilt
 	private int servoAngleJump = 10;	//jump 10degrees for change in servo angle
@@ -40,15 +45,15 @@ public class MiscTaskJoystick implements Runnable{
 		this.client = client;
 		this.threadEnable = threadEnable;
 		this.dataStore = dataStore;
-		ledArray1 = false;
-		ledArray2 = false;
-		led2ZeroValTracker = true;
-		led2ZeroValTracker = true;
 		cam1Servo = new int[cam1ServoCount];
 		cam2Servo = new int[cam2ServoCount];
+		led2ZeroValTracker = true;
+		led2ZeroValTracker = true;
+		turnOffLed();
+		resetServoPos();
 
 		try {
-			//tcpSender = new TCPSender(this.client);
+			tcpSender = new TCPSender(this.client);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,10 +73,19 @@ public class MiscTaskJoystick implements Runnable{
 		//check if controller is still connected
 		//Stop thread from executing if controller gets disconnected
 		while(threadEnable.getThreadState() && jC.getPoll()) {
+			setVal();
 			updateDataAccumulator();
-			dataStore.dispThrusterValues();
+			dataStore.dispServoValues();
+			dataStore.dispLed();
 			sleep(10);
 		}
+		//send stop values to arduino immediately
+		System.out.println("Stopping Leds");
+		sendStopVal();
+		//update values in dataAccumulator one last time
+		updateDataAccumulator();
+		dataStore.dispServoValues();
+		dataStore.dispLed();
 	}
 	
 	//updates the values on object of DataAccumulator
@@ -105,17 +119,19 @@ public class MiscTaskJoystick implements Runnable{
 					}
 				}
 				else {
+					//task not triggered by toggle button
 					//if toggle button is pressed for this axis do not read value
-					if(!jC.checkAxisToggleButtonPressed(task.getAxisNumber()))
+					if(!jC.checkAxisToggleButtonPressed(task.getAxisNumber())) {
 						//task not triggered by toggle button
 						calVal(task.getTaskName(), axesValPercent[task.getAxisNumber()], task.getCode());
+					}
 				}
 			}
 		}
 		
 		//get all button values
 		boolean buttonVal[] = new boolean[jC.getButtonCount()];
-		
+		jC.getButtonsData(buttonVal);
 		//check all buttonTasks 
 		ArrayList<ButtonTask> buttonTaskList = jC.getButtonTaskList();
 		for(int i=0;i<buttonTaskList.size();i++) {
@@ -180,6 +196,7 @@ public class MiscTaskJoystick implements Runnable{
 		}
 	}
 	
+	//sets the new value for led
 	private void setLedVal(int ledNo, float newVal, int code) {
 		if(ledNo<=noLed) {
 			//-1 is set as button not pressed value in setVal
@@ -288,6 +305,19 @@ public class MiscTaskJoystick implements Runnable{
 		}
 	}
 	
+	//turns off leds
+	private void turnOffLed() {
+		ledArray1 = false;
+		ledArray2 = false;
+	}
+	
+	private void resetServoPos() {
+		cam1Servo[0] = defaultServoAngle;
+		cam1Servo[1] = defaultServoAngle;
+		cam2Servo[0] = defaultServoAngle;
+		cam2Servo[1] = defaultServoAngle;
+	}
+	
 	//displays current val of all thrusters
 	private void dispValues() {
 		System.out.println("Cam1: Servo1: " + cam1Servo[0] + " Cam1: Servo2: " + cam1Servo[1]);
@@ -300,6 +330,37 @@ public class MiscTaskJoystick implements Runnable{
 			TimeUnit.MILLISECONDS.sleep(i);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void sendStopVal() {
+		turnOffLed();
+		resetServoPos();
+		ArrayList<AxisTask> axisTaskList = jC.getAxisTaskList();
+		for(AxisTask task: axisTaskList) {
+			if(task.getTaskType().equalsIgnoreCase("Led")) {
+				int code = task.getCode();
+				//tcpSender.sendData(code, 0);
+				sleep(10);
+			}
+			else if(task.getTaskType().equalsIgnoreCase("CamServo")) {
+				int code = task.getCode();
+				//tcpSender.sendData(code, defaultServoAngle);
+				sleep(10);
+			}
+		}
+		ArrayList<ButtonTask> buttonTaskList = jC.getButtonTaskList();
+		for(ButtonTask task: buttonTaskList) {
+			if(task.getTaskType().equalsIgnoreCase("Led") && !task.getTaskName().equalsIgnoreCase("Toggle")) {
+				int code = task.getCode();
+				//tcpSender.sendData(code, 0);
+				sleep(10);
+			}
+			else if(task.getTaskType().equalsIgnoreCase("CamServo") && !task.getTaskName().equalsIgnoreCase("Toggle")) {
+				int code = task.getCode();
+				//tcpSender.sendData(code, defaultServoAngle);
+				sleep(10);
+			}
 		}
 	}
 }
