@@ -147,8 +147,11 @@ public class ControllerGUI{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				joystickContainerList.add(jc);
-				new Thread(new JoystickInputReader(jc, client, threadEnable, dataStore)).start();
+				//Assign containers and start threads for controllers with tasks only
+				if(jc.getTaskCount()>0) {
+					joystickContainerList.add(jc);
+					new Thread(new JoystickInputReader(jc, client, threadEnable, dataStore)).start();
+				}
 			}
 		}
 	}
