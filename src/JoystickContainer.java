@@ -156,15 +156,18 @@ public class JoystickContainer {
 	//check if button numbers are repeating
 	//multi function buttons are allowed but toggle button can only be used to toggle
 	public void addButtonTask(ButtonTask t) {
+		boolean flag = true;
 		for(ButtonTask b:buttonTaskList) {
 			if(b.getButtonNumber()==t.getButtonNumber()) {
-				if((t.getTaskName().equalsIgnoreCase("Toggle") && b.getTaskName().equalsIgnoreCase("Toggle"))
-						|| (!t.getTaskName().equalsIgnoreCase("Toggle") && !b.getTaskName().equalsIgnoreCase("Toggle"))) {
-					buttonTaskList.add(t);
-
-					//System.out.println(t.getTaskName() + " " + t.getTaskType() + " " + t.getButtonNumber() + " " + t.getCode());
+				//System.out.println(t.getTaskName() + " " + b.getTaskName() );
+				if((t.getTaskName().equalsIgnoreCase("Toggle") && !b.getTaskName().equalsIgnoreCase("Toggle"))
+						|| (!t.getTaskName().equalsIgnoreCase("Toggle") && b.getTaskName().equalsIgnoreCase("Toggle"))) {
+					flag = false;
 				}
 			}
+		}
+		if(flag) {
+			buttonTaskList.add(t);
 		}
 	}
 	
