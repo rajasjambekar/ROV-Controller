@@ -441,21 +441,33 @@ public class ConfigurationUI {
     			String compName = getComponent(connectedControllers.get(key));
 				if(compName!="") {
 					//check if this button has been attached as toggle button previously
-					if(compName.contains("BUTTON") && !checkAssignedToggleButton(i, compName.substring(6))) {
+					if(compName.contains("BUTTON") && !checkAssignedToggleButton(i, compName.substring(6), controllerChooser.getValue().toString())) {
 						name.setText(controllerChooser.getValue().toString());
 						comp.setText(compName);
 						break;
 					}
-					else {
+					else if(compName.contains("AXIS")) {
 						name.setText(controllerChooser.getValue().toString());
 						comp.setText(compName);
+						//force combinations on opposite movements of same system
+						//eg. left-right, up-down, etc
+						if(i%2==0) {
+							controllerLabelList[i+1].setText(controllerChooser.getValue().toString());
+							componentLabelList[i+1].setText(compName);
+							setToggleButtonList[i+1].setText(setToggleButtonList[i].getText());
+						}
+						else {
+							controllerLabelList[i-1].setText(controllerChooser.getValue().toString());
+							componentLabelList[i-1].setText(compName);
+							setToggleButtonList[i-1].setText(setToggleButtonList[i].getText());
+						}
 						break;
 					}
 				}
     		}
 		}
 	}
-
+    
     private String getComponent(Controller c) {
     	Component[] controllerComponents = c.getComponents();
     	long time = System.currentTimeMillis();
@@ -514,18 +526,30 @@ public class ConfigurationUI {
 			if(controllerChooser.getValue().toString().equals(key.toString())) {
     			String toggleButton = getComponent(connectedControllers.get(key));
     			//check if this button has been attached as normal button previously
-    			if(toggleButton.contains("BUTTON") && !checkAssignedButton(i, toggleButton.substring(6))) {
+    			//prevent assignment of toggle button if controller is not assigned before
+    			if(toggleButton.contains("BUTTON") && !checkAssignedButton(i, toggleButton.substring(6))
+    					&& !controllerLabelList[i].getText().toString().equalsIgnoreCase("")
+    					&& !controllerLabelList[i].getText().toString().equalsIgnoreCase("unassigned")) {
 					String str = toggleButton.substring(6);
 					//System.out.println(str.toString());
-					if(tggl!=null)
+					if(tggl!=null) {
 						tggl.setText(str.toString());
+						if(i%2==0) {
+							toggleLabelList[i+1].setText(str.toString());
+						}
+						else {
+							toggleLabelList[i-1].setText(str.toString());
+						}
+					}
 				}
-    			else if(!toggleButton.contains("BUTTON")){
+    			//commented since this doesn't seem to be correct
+    			//toggle buttton should be a button
+    			/*else if(!toggleButton.contains("BUTTON")){
     				String str = toggleButton.substring(6);
 					//System.out.println(str.toString());
 					if(tggl!=null)
 						tggl.setText(str.toString());
-				}
+				}*/
     		}
 		}
 	}
@@ -534,27 +558,28 @@ public class ConfigurationUI {
     private boolean checkAssignedButton(int i, String toggleButton) {
     	Label controller = controllerLabelList[i];
     	for(int j=0;j<controllerLabelList.length;j++) {
-    		if(componentLabelList[j].getText().contains("BUTTON")) {
-        		String buttonNo = componentLabelList[j].getText().substring(6);
-        		if(controllerLabelList[j].getText().toString() == controller.getText().toString()
-        				&& buttonNo==toggleButton)
+    		//check if component is a button
+    		if(componentLabelList[j].getText().toString().contains("BUTTON")) {
+    			//check if togglebutton is same as button number
+        		//and both have the same controller
+        		String buttonNo = componentLabelList[j].getText().toString().substring(6);
+        		if(toggleButton.equalsIgnoreCase(buttonNo)
+        				&& controllerLabelList[j].getText().toString().equalsIgnoreCase(controller.getText().toString())) {
         			return true;
-    			
+        		}
     		}
     	}
 		return false;
 	}
     
     //check if selected button is previously assigned as toggle button
-    private boolean checkAssignedToggleButton(int i, String button) {
-    	Label controller = controllerLabelList[i];
-    	for(int j=0;j<controllerLabelList.length;j++) {
-    		if(componentLabelList[j].getText().contains("BUTTON")) {
-        		String toggleButtonNo = toggleLabelList[j].getText().toString();
-        		if(controllerLabelList[j].getText().toString() == controller.getText().toString()
-        				&& toggleButtonNo==button)
-        			return true;
-    			
+    private boolean checkAssignedToggleButton(int i, String button, String controllerName) {
+    	for(int j=0;j<toggleLabelList.length;j++) {
+    		//check if button is same as toggle button number
+    		//and both have the same controller
+    		if(toggleLabelList[j].getText().toString().equalsIgnoreCase(button)
+    				&& controllerLabelList[j].getText().toString().equalsIgnoreCase(controllerName)) {
+    			return true;
     		}
     	}
 		return false;
