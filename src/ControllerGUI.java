@@ -55,18 +55,13 @@ public class ControllerGUI{
 	private HashMap<String,Controller> connectedControllers;
 	Socket client;
 	private List<String> lines;
-	private MenuItem[] configMmenuItemList;
-	private MenuItem[] enginesMmenuItemList;
-	private ThreadEnable threadEnable;
+	private static ThreadEnable threadEnable;
 	private String configFile;
-	private String[] controllerTypeList;
 	private ArrayList<JoystickContainer> joystickContainerList;
 	DataAccumulator dataStore;
 	
 	@FXML
     private void initialize() {
-		configMmenuItemList = new MenuItem[] {menuRediscover, menuControllerConfig, menuQuit};
-		enginesMmenuItemList = new MenuItem[] {menuStartEngines, menuStopEngines};
 		setHandler();
     }
 	
@@ -81,7 +76,6 @@ public class ControllerGUI{
 	//init non-fxml content
 	public void init() {
 		threadEnable = new ThreadEnable();
-		controllerTypeList = new String[] {"Stick", "Keyboard", "Mouse", "Gamepad"};
 		reDiscoverControllers();
     	configFile = "Config.txt";
     	readConfigurationFile();
@@ -135,14 +129,14 @@ public class ControllerGUI{
 	protected void stopEngines() {
 		threadEnable.setThreadState(false);
 		//close the tcp connection with arduino
-		//closeTcpConnection();
+		closeTcpConnection();
 	}
 
 	//starts threads for joystickInputReader, TCPReceiver, GUIUpdater
 	//passes boolean threadEnable to threads to control them from this class
 	private void startEngines() {
 		//create a new tcp connection with arduino
-		//startTcpConnection();
+		startTcpConnection();
 		//reads the latest configuration from the config file
 		readConfigurationFile();
 		//change the threadEnable state to true to allow running of threads
@@ -276,16 +270,6 @@ public class ControllerGUI{
 		}
 		return true;
 	}
-	
-	//check if string is equal to any controller type
-	//do not match the entire string but match contains
-    private boolean checkEqualsControllerType(String string) {
-    	for(String type:controllerTypeList) {
-    		if(string.contains(type))
-    			return true;
-    	}
-		return false;
-	}
 
 	//read config file
 	private void readConfigurationFile() {
@@ -301,7 +285,7 @@ public class ControllerGUI{
 	
 	//start tcp connection
 	private void startTcpConnection(){
-	   String serverName = "192.168.0.102";
+	   String serverName = "192.168.0.10";
 	   int port = 23;
 	   System.out.println("Connecting to " + serverName +" on port " + port);
 	   try {
