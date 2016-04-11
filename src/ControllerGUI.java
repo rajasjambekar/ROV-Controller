@@ -128,6 +128,8 @@ public class ControllerGUI{
 	//changes boolean threadEnable to false
 	protected void stopEngines() {
 		threadEnable.setThreadState(false);
+		//wait 1sec to ensure all stop data is sent over tcp
+		sleep(1000);
 		//close the tcp connection with arduino
 		closeTcpConnection();
 	}
@@ -293,6 +295,7 @@ public class ControllerGUI{
 	   } catch (IOException e) {
 		   e.printStackTrace();
 	   }
+	   threadEnable.setTcpState(true);
 	   System.out.println("Just connected to " + client.getRemoteSocketAddress());
 	}
 	
@@ -301,6 +304,16 @@ public class ControllerGUI{
 		try {
 			client.close();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		threadEnable.setTcpState(false);
+		System.out.println("Tcp connection closed");
+	}
+	
+	private void sleep(int i) {
+		try {
+			TimeUnit.MILLISECONDS.sleep(i);
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
