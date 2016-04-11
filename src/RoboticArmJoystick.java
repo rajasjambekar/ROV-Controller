@@ -25,16 +25,17 @@ public class RoboticArmJoystick implements Runnable {
 		this.client = client;
 		this.threadEnable = threadEnable;
 		try {
-			//tcpSender = new TCPSender(this.client);
+			tcpSender = new TCPSender(this.client, threadEnable);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		motorVal = new int[numMotors];
-		motorTimer = new long[numMotors];
+		motorTimer = new long[numMotors*2];
 		//set all motors with stop val
 		stopMotors();
+		initMotorTimer();
 	}
-	
+
 	@Override
 	public void run() {
 		//check if controller is still connected
@@ -118,76 +119,92 @@ public class RoboticArmJoystick implements Runnable {
 	//code value is combination of 2 thruster codes each 2 digit thus making 4 digit code
 	//This code is common for buttons and axis
 	//In case of buttons, the value of axisVal is 1/0. 
+	//set timer for each task. Task is evaluated only if the time since previous evaluation is 
+	//greater than timegap
 	private void calVal(String taskName, float axisVal, int code) {
-		if(taskName.equalsIgnoreCase("ARM_LT")) {
+		if(taskName.equalsIgnoreCase("ARM_LT") && System.currentTimeMillis()-motorTimer[0]>timeGap) {
 			int pos = 0;
 			int dir = 1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[0] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("ARM_RT")) {
+		else if(taskName.equalsIgnoreCase("ARM_RT") && System.currentTimeMillis()-motorTimer[1]>timeGap) {
 			int pos = 0;
 			int dir = -1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[1] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("ARM_FW")) {
+		else if(taskName.equalsIgnoreCase("ARM_FW") && System.currentTimeMillis()-motorTimer[2]>timeGap) {
 			int pos = 1;
 			int dir = 1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[2] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("ARM_BW")) {
+		else if(taskName.equalsIgnoreCase("ARM_BW") && System.currentTimeMillis()-motorTimer[3]>timeGap) {
 			int pos = 1;
 			int dir = -1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[3] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("ARM_UP")) {
+		else if(taskName.equalsIgnoreCase("ARM_UP") && System.currentTimeMillis()-motorTimer[4]>timeGap) {
 			int pos = 2;
 			int dir = 1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[4] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("ARM_DN")) {
+		else if(taskName.equalsIgnoreCase("ARM_DN") && System.currentTimeMillis()-motorTimer[5]>timeGap) {
 			int pos = 2;
 			int dir = -1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[5] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("GRP_360_ACLK")) {
+		else if(taskName.equalsIgnoreCase("GRP_360_ACLK") && System.currentTimeMillis()-motorTimer[6]>timeGap) {
 			int pos = 3;
 			int dir = 1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[6] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("GRP_360_CLKW")) {
+		else if(taskName.equalsIgnoreCase("GRP_360_CLKW") && System.currentTimeMillis()-motorTimer[7]>timeGap) {
 			int pos = 3;
 			int dir = -1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[7] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("GRP_180_DN")) {
+		else if(taskName.equalsIgnoreCase("GRP_180_DN") && System.currentTimeMillis()-motorTimer[8]>timeGap) {
 			int pos = 4;
 			int dir = 1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[8] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("GRP_180_UP")) {
+		else if(taskName.equalsIgnoreCase("GRP_180_UP") && System.currentTimeMillis()-motorTimer[9]>timeGap) {
 			int pos = 4;
 			int dir = -1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[9] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("GRP_CL")) {
+		else if(taskName.equalsIgnoreCase("GRP_CL") && System.currentTimeMillis()-motorTimer[10]>timeGap) {
 			int pos = 5;
 			int dir = 1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[10] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("GRP_OP")) {
+		else if(taskName.equalsIgnoreCase("GRP_OP") && System.currentTimeMillis()-motorTimer[11]>timeGap) {
 			int pos = 5;
 			int dir = -1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[11] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("CLW_CL")) {
+		else if(taskName.equalsIgnoreCase("CLW_CL") && System.currentTimeMillis()-motorTimer[12]>timeGap) {
 			int pos = 6;
 			int dir = 1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[12] = System.currentTimeMillis();
 		}
-		else if(taskName.equalsIgnoreCase("CLW_OP")) {
+		else if(taskName.equalsIgnoreCase("CLW_OP") && System.currentTimeMillis()-motorTimer[13]>timeGap) {
 			int pos = 6;
 			int dir = -1;
 			setMotorVal(motorVal[pos], axisVal, code, dir, pos);
+			motorTimer[13] = System.currentTimeMillis();
 		}
 	}
 	
@@ -203,17 +220,28 @@ public class RoboticArmJoystick implements Runnable {
 			
 		//get thruster new speed
 		int mVal = motorVal[pos];
-		if(axisVal>60 && dir==-1)
+		if(axisVal>60 && dir==-1) {
 			mVal = -fullSpeedVal;
-		else if(axisVal<40 && dir==1)
-			mVal = fullSpeedVal;
-		else if(axisVal<60 && axisVal>40)
-			mVal = 0;
-		if(compareMotorVal(prevVal, mVal)) {
 			//new value is different from previous value
 			//send new value over tcp
 			motorVal[pos] = mVal;
-			//tcpSender.sendData(code, Math.abs(motorVal[pos]));
+			tcpSender.sendData(code, Math.abs(motorVal[pos]));
+			
+		}
+		else if(axisVal<40 && dir==1) {
+			mVal = fullSpeedVal;
+			//new value is different from previous value
+			//send new value over tcp
+			motorVal[pos] = mVal;
+			tcpSender.sendData(code, Math.abs(motorVal[pos]));
+			
+		}
+		else if(axisVal<60 && axisVal>40) {
+			mVal = 0;
+			if(motorVal[pos]!=mVal) {
+				motorVal[pos] = mVal;
+				tcpSender.sendData(code, Math.abs(motorVal[pos]));
+			}
 		}
 	}
 	
@@ -256,7 +284,7 @@ public class RoboticArmJoystick implements Runnable {
 		for(AxisTask task: axisTaskList) {
 			if(task.getTaskType().equalsIgnoreCase("RoboticArm")) {
 				int code = task.getCode();
-				//tcpSender.sendData(code, stopVal);
+				tcpSender.sendData(code, stopVal);
 				sleep(10);
 			}
 		}
@@ -264,9 +292,16 @@ public class RoboticArmJoystick implements Runnable {
 		for(ButtonTask task: buttonTaskList) {
 			if(task.getTaskType().equalsIgnoreCase("RoboticArm") && !task.getTaskName().equalsIgnoreCase("Toggle")) {
 				int code = task.getCode();
-				//tcpSender.sendData(code, stopVal);
+				tcpSender.sendData(code, stopVal);
 				sleep(10);
 			}
 		}
+	}
+	
+
+	//init motor timer with current time values
+	private void initMotorTimer() {
+		for(int i = 0;i<motorTimer.length;i++)
+			motorTimer[i] = System.currentTimeMillis();
 	}
 }
