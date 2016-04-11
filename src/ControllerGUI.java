@@ -1,3 +1,6 @@
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -6,6 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -17,8 +27,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import net.java.games.input.Controller;
+import uk.co.caprica.vlcj.binding.LibVlc;
+import uk.co.caprica.vlcj.player.MediaPlayerFactory;
+import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
+import uk.co.caprica.vlcj.player.embedded.windows.Win32FullScreenStrategy;
+import uk.co.caprica.vlcj.player.headless.HeadlessMediaPlayer;
+import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 public class ControllerGUI{
 	
@@ -29,6 +48,9 @@ public class ControllerGUI{
 	@FXML MenuItem menuQuit;
 	@FXML MenuItem menuStartEngines;
 	@FXML MenuItem menuStopEngines;
+	
+	//@FXML MediaView mediaView;
+	@FXML Canvas video1Canvas;
 	
 	private HashMap<String,Controller> connectedControllers;
 	Socket client;
@@ -130,6 +152,42 @@ public class ControllerGUI{
 		
 		initLists();
 		createControllerContainers();
+	}
+	
+	//test code
+	//for vlc rtsp
+	void startVlc() {
+		JFrame f = new JFrame();
+		f.setLocation(100, 100);
+		f.setSize(1000, 600);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
+		
+		Canvas c = new Canvas();
+		c.setBackground(Color.BLACK);
+		JPanel p = new JPanel();
+		p.setLayout(new BorderLayout());
+		p.add(c);
+		f.add(p);
+		
+		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), "C:/Program Files (x86)/VideoLAN/VLC");
+		Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(), LibVlc.class);
+		
+		MediaPlayerFactory mpf = new MediaPlayerFactory();
+		EmbeddedMediaPlayer emp = mpf.newEmbeddedMediaPlayer(new Win32FullScreenStrategy(f));
+		emp.setVideoSurface(mpf.newVideoSurface(c));
+		
+		String file = "test.mp4";
+		emp.prepareMedia(file);
+		emp.play();
+		/*HeadlessMediaPlayer mPlayer = mpf.newHeadlessMediaPlayer();
+
+		    String mrl = "rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov";
+
+		    String options = ":sout=#transcode{vcodec=h264,venc=x264{cfr=16},scale=1,acodec=mp4a,ab=160,channels=2,samplerate=44100}"
+		            + ":file{dst=C:/Users/the man/yahoo.mp4}";
+
+		    mPlayer.playMedia(mrl, options);*/
 	}
 	
 	private void initLists() {
