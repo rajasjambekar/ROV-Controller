@@ -39,9 +39,11 @@ public class RoboticArmJoystick implements Runnable {
 	public void run() {
 		//check if controller is still connected
 		//Stop thread from executing if controller gets disconnected
+		//check if tcp is connected
+		//Stop thread from executing if tcp gets disconnected
 		//thread will restart when controller is rediscovered
 		//Also keep checking if controller contains task to control roboticarm
-		while(threadEnable.getThreadState() && jC.getPoll()) {
+		while(threadEnable.getThreadState() && threadEnable.getTcpState() && jC.getPoll()) {
 			setMotorVal();
 			updateDataAccumulator();
 			dataStore.dispMotorValues();
