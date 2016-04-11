@@ -12,10 +12,12 @@ public class TCPSender {
 	private OutputStream outToServer;
 	private DataOutputStream out;
 	private String msg = "";
+	private ThreadEnable threadEnable;
 	
 	//get output stream for client and set up a new dataoutputstream
-	public TCPSender(Socket client) throws Exception {
+	public TCPSender(Socket client, ThreadEnable threadEnable) throws Exception {
 		this.client = client;
+		this.threadEnable = threadEnable;
 		outToServer = this.client.getOutputStream();
  	   	out = new DataOutputStream(outToServer);
 	}
@@ -40,6 +42,7 @@ public class TCPSender {
 			out.writeChars(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
+			threadEnable.setTcpState(false);
 		}
 		//sleep(100);
 	}
