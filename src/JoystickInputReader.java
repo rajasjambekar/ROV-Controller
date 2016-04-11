@@ -49,7 +49,7 @@ public class JoystickInputReader implements Runnable {
 	@Override
 	public void run() {
 		//Run while the controller is still connected
-		while(threadEnable.getThreadState() && jContainer.getPoll()) {
+		while(threadEnable.getThreadState() && threadEnable.getTcpState() && jContainer.getPoll()) {
 			//read raw data from controller
 			jContainer.readAxes();
 			jContainer.readButtons();
