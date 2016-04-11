@@ -9,19 +9,21 @@ import java.util.concurrent.TimeUnit;
  * 
  */
 public class TCPReceiver implements Runnable{
-	Socket client;
-	InputStream inFromServer;
-	DataInputStream in;
+	private Socket client;
+	private InputStream inFromServer;
+	private DataInputStream in;
+	private ThreadEnable threadEnable;
 	
-	public TCPReceiver(Socket client) throws Exception {
+	public TCPReceiver(Socket client, ThreadEnable threadEnable) throws Exception {
 		this.client = client;
+		this.threadEnable = threadEnable;
 		inFromServer = this.client.getInputStream();
 		in = new DataInputStream(inFromServer);
 	}
 
 	@Override
 	public void run() {
-		while(true) {
+		while(threadEnable.getThreadState() && threadEnable.getTcpState()) {
 			String packet = fetchDataPacket();
 			if(packet!="") {
 				//valid packet received
@@ -51,6 +53,7 @@ public class TCPReceiver implements Runnable{
  	    	}
 		} catch (Exception e) {
 			e.printStackTrace();
+			threadEnable.setTcpState(false);
 		}
  	    return "";
 	}
