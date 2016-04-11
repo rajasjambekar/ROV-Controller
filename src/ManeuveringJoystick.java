@@ -23,11 +23,11 @@ public class ManeuveringJoystick implements Runnable{
 		this.dataStore = dataStore;
 		this.client = client;
 		this.threadEnable = threadEnable;
-		try {
-			//tcpSender = new TCPSender(this.client);
+		/*try {
+			tcpSender = new TCPSender(this.client, threadEnable);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		thrusterVal = new int[numThrusters];
 		thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
 		//set all thrusters with stop val
@@ -38,8 +38,10 @@ public class ManeuveringJoystick implements Runnable{
 	public void run() {
 		//check if controller is still connected
 		//Stop thread from executing if controller gets disconnected
+		//check if tcp is connected
+		//Stop thread from executing if tcp gets disconnected
 		//Also keep checking if controller contains task to maneuver rov
-		while(threadEnable.getThreadState() && jC.getPoll()) {
+		while(threadEnable.getThreadState() && threadEnable.getTcpState() && jC.getPoll()) {
 			setThrusterVal();
 			updateDataAccumulator();
 			dataStore.dispThrusterValues();
