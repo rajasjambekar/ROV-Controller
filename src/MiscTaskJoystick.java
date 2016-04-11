@@ -53,7 +53,7 @@ public class MiscTaskJoystick implements Runnable{
 		resetServoPos();
 
 		try {
-			tcpSender = new TCPSender(this.client);
+			tcpSender = new TCPSender(this.client, threadEnable);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -72,7 +72,9 @@ public class MiscTaskJoystick implements Runnable{
 	public void run() {
 		//check if controller is still connected
 		//Stop thread from executing if controller gets disconnected
-		while(threadEnable.getThreadState() && jC.getPoll()) {
+		//check if tcp is connected
+		//Stop thread from executing if tcp gets disconnected
+		while(threadEnable.getThreadState() && threadEnable.getTcpState() && jC.getPoll()) {
 			setVal();
 			updateDataAccumulator();
 			dataStore.dispServoValues();
@@ -210,11 +212,12 @@ public class MiscTaskJoystick implements Runnable{
 				else if(led1ZeroValTracker){
 					led1ZeroValTracker = false;
 					ledArray1 = !ledArray1;
+					System.out.println("1");
 					if(ledArray1) {
-						//tcpSender.sendData(code, 1);
+						tcpSender.sendData(code, 1);
 					}
 					else {
-						//tcpSender.sendData(code, 0);
+						tcpSender.sendData(code, 0);
 					}
 				}
 			}
@@ -226,11 +229,12 @@ public class MiscTaskJoystick implements Runnable{
 				else if(led2ZeroValTracker){
 					led2ZeroValTracker = false;
 					ledArray2 = !ledArray2;
+					System.out.println("2");
 					if(ledArray2) {
-						//tcpSender.sendData(code, 1);
+						tcpSender.sendData(code, 1);
 					}
 					else {
-						//tcpSender.sendData(code, 0);
+						tcpSender.sendData(code, 0);
 					}
 				}
 			}
@@ -256,23 +260,23 @@ public class MiscTaskJoystick implements Runnable{
 				//if dir == 1 reduce value
 				if(dir==1 && cam1Servo[servoNo]>=servoAngleJump && newAngle<=50) {
 					cam1Servo[servoNo] -= servoAngleJump;
-					//tcpSender.sendData(code, cam1Servo[servoNo]);
+					tcpSender.sendData(code, cam1Servo[servoNo]);
 				}
 				//if dir == 2 increment value
 				else if(dir==2 && cam1Servo[servoNo]<=(180-servoAngleJump) && newAngle>=130) {
 					cam1Servo[servoNo] += servoAngleJump;
-					//tcpSender.sendData(code, cam1Servo[servoNo]);
+					tcpSender.sendData(code, cam1Servo[servoNo]);
 				}
 
 			}
 			else if(camNo==2 && servoNo<cam2Servo.length) {
 				if(dir==1 && cam2Servo[servoNo]>=servoAngleJump && newAngle<=50) {
 					cam2Servo[servoNo] -= servoAngleJump;
-					//tcpSender.sendData(code, cam2Servo[servoNo]);
+					tcpSender.sendData(code, cam2Servo[servoNo]);
 				}
 				else if(dir==2 && cam2Servo[servoNo]<=(180-servoAngleJump) && newAngle>=130) {
 					cam2Servo[servoNo] += servoAngleJump;
-					//tcpSender.sendData(code, cam2Servo[servoNo]);
+					tcpSender.sendData(code, cam2Servo[servoNo]);
 				}
 			}
 		}
@@ -283,22 +287,22 @@ public class MiscTaskJoystick implements Runnable{
 					//min
 					if(camNo==1 && servoNo<cam1Servo.length && cam1Servo[servoNo]>=minServoAngle+servoAngleJump) {
 						cam1Servo[servoNo] -= servoAngleJump;
-						//tcpSender.sendData(code, cam1Servo[servoNo]);
+						tcpSender.sendData(code, cam1Servo[servoNo]);
 					}
 					else if(camNo==2 && servoNo<cam2Servo.length && cam2Servo[servoNo]>=minServoAngle+servoAngleJump) {
 						cam2Servo[servoNo] -= servoAngleJump;
-						//tcpSender.sendData(code, cam2Servo[servoNo]);
+						tcpSender.sendData(code, cam2Servo[servoNo]);
 					}
 				}
 				else if(dir==2) {
 					//max
 					if(camNo==1 && servoNo<cam1Servo.length && cam1Servo[servoNo]<=maxServoAngle-servoAngleJump) {
 						cam1Servo[servoNo] += servoAngleJump;
-						//tcpSender.sendData(code, cam1Servo[servoNo]);
+						tcpSender.sendData(code, cam1Servo[servoNo]);
 					}
 					else if(camNo==2 && servoNo<cam2Servo.length && cam2Servo[servoNo]<=maxServoAngle-servoAngleJump) {
 						cam2Servo[servoNo] += servoAngleJump;
-						//tcpSender.sendData(code, cam2Servo[servoNo]);
+						tcpSender.sendData(code, cam2Servo[servoNo]);
 					}
 				}
 			}
@@ -340,12 +344,12 @@ public class MiscTaskJoystick implements Runnable{
 		for(AxisTask task: axisTaskList) {
 			if(task.getTaskType().equalsIgnoreCase("Led")) {
 				int code = task.getCode();
-				//tcpSender.sendData(code, 0);
+				tcpSender.sendData(code, 0);
 				sleep(10);
 			}
 			else if(task.getTaskType().equalsIgnoreCase("CamServo")) {
 				int code = task.getCode();
-				//tcpSender.sendData(code, defaultServoAngle);
+				tcpSender.sendData(code, defaultServoAngle);
 				sleep(10);
 			}
 		}
@@ -353,12 +357,12 @@ public class MiscTaskJoystick implements Runnable{
 		for(ButtonTask task: buttonTaskList) {
 			if(task.getTaskType().equalsIgnoreCase("Led") && !task.getTaskName().equalsIgnoreCase("Toggle")) {
 				int code = task.getCode();
-				//tcpSender.sendData(code, 0);
+				tcpSender.sendData(code, 0);
 				sleep(10);
 			}
 			else if(task.getTaskType().equalsIgnoreCase("CamServo") && !task.getTaskName().equalsIgnoreCase("Toggle")) {
 				int code = task.getCode();
-				//tcpSender.sendData(code, defaultServoAngle);
+				tcpSender.sendData(code, defaultServoAngle);
 				sleep(10);
 			}
 		}
