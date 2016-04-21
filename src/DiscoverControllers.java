@@ -76,7 +76,6 @@ public class DiscoverControllers {
 				}
 				//key not used previously
 				connectedControllers.put(id.toString(), c);
-				//System.out.println(id);
 			}
 		}
 	}

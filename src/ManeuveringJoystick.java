@@ -23,11 +23,11 @@ public class ManeuveringJoystick implements Runnable{
 		this.dataStore = dataStore;
 		this.client = client;
 		this.threadEnable = threadEnable;
-		/*try {
+		try {
 			tcpSender = new TCPSender(this.client, threadEnable);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}*/
+		}
 		thrusterVal = new int[numThrusters];
 		thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
 		//set all thrusters with stop val
@@ -99,10 +99,10 @@ public class ManeuveringJoystick implements Runnable{
 		for(int i=0;i<buttonTaskList.size();i++) {
 			ButtonTask task = buttonTaskList.get(i);
 			if(task.getTaskType().equalsIgnoreCase("Maneuver")) {
-				float val = -1;
+				float val = -1;		//set default value to button not pressed
 				//check if button pressed
 				if(buttonVal[task.getButtonNumber()-1])
-					val = -2;
+					val = -2;		//button pressed value
 				calVal(task.getTaskName(), val, task.getCode());
 			}
 		}
@@ -159,9 +159,9 @@ public class ManeuveringJoystick implements Runnable{
 	
 	private void setThrusterVal(int prevVal, float axisVal, int code, int dir, int pos) {
 		//convert button press val to appropriate val
-		if(axisVal==-2)	//thruster on
-			axisVal = 90;	//buttons are on off. So do not power thrusters to full value
-		else if(axisVal==-1)
+		if(axisVal==-2)	//Button pressed. Thruster on
+			axisVal = 90;	//buttons are on off. So do not power thrusters to 100%
+		else if(axisVal==-1)	//button not pressed. Thruster off
 			axisVal = 50;
 		
 		int t = 0;
@@ -170,13 +170,15 @@ public class ManeuveringJoystick implements Runnable{
 			t = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
 		else
 			//rotation thruster.
-			//one motor fw and other reverse
+			//one thruster fw and other reverse
 			t = THRUSTER_FULL_BW + (int) ((axisVal/100)*(thrusterValRange));
+		//check for change in thruster value
 		if(compareThrusterVal(thrusterVal[1], t)) {
-			if(t<1600 && t>1400)
+			//round off thruster values between 1600 and 1400 to 1500
+			if(t<1600 && t>1400)	//
 				t = THRUSTER_STOP;
-			thrusterVal[pos] = t;
-			//tcpSender.sendData(code, t);
+			thrusterVal[pos] = t;	//assign new thruster value
+			tcpSender.sendData(code, t);	//send new thruster value over tcp
 		}
 	}
 	
@@ -231,7 +233,7 @@ public class ManeuveringJoystick implements Runnable{
 		for(ButtonTask task: buttonTaskList) {
 			if(task.getTaskType().equalsIgnoreCase("Maneuver") && !task.getTaskName().equalsIgnoreCase("Toggle")) {
 				int code = task.getCode();
-				//tcpSender.sendData(code, THRUSTER_STOP);
+				tcpSender.sendData(code, THRUSTER_STOP);
 				sleep(10);
 			}
 		}
