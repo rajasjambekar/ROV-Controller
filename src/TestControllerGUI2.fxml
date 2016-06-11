@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Cylinder?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane prefHeight="720.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ControllerGUI">
+   <center>
+      <AnchorPane style="-fx-background-color: WHITE;" BorderPane.alignment="CENTER">
+         <children>
+            <Pane layoutY="-1.0" prefHeight="237.0" prefWidth="444.0">
+               <children>
+                  <Label layoutX="205.0" layoutY="151.0" text="TH_LR1">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="205.0" layoutY="204.0" text="TH_LR2">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="155.0" layoutY="80.0" text="TH_FW1">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="250.0" layoutY="80.0" text="TH_FW2">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="14.0" layoutY="138.0" text="TH_UD1">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="394.0" layoutY="138.0" text="TH_UD2">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <ProgressBar fx:id="TH_LR1_PB" layoutX="147.0" layoutY="166.0" prefHeight="20.0" prefWidth="150.0" progress="0.0" rotate="180.0" />
+                  <ProgressBar fx:id="TH_LR2_PB" layoutX="147.0" layoutY="186.0" prefHeight="20.0" prefWidth="150.0" progress="0.0" rotate="180.0" />
+                  <ProgressBar fx:id="TH_FB1_PB" layoutX="169.0" layoutY="80.0" prefHeight="18.0" prefWidth="90.0" progress="0.0" rotate="-90.0" />
+                  <ProgressBar fx:id="TH_FB2_PB" layoutX="186.0" layoutY="80.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="18.0" prefWidth="90.0" progress="0.0" rotate="-90.0" />
+                  <ProgressBar fx:id="TH_UD1_PB" layoutX="18.0" layoutY="136.0" prefHeight="18.0" prefWidth="100.0" progress="0.0" rotate="90.0" />
+                  <ProgressBar fx:id="TH_UD2_PB" layoutX="327.0" layoutY="136.0" prefHeight="18.0" prefWidth="100.0" progress="0.0" rotate="90.0" />
+                  <Separator layoutY="243.0" prefHeight="2.0" prefWidth="1170.0" />
+                  <Label layoutX="361.0" layoutY="14.0" text="THRUSTERS">
+                     <font>
+                        <Font name="Poor Richard" size="17.0" />
+                     </font>
+                  </Label>
+                  <ToggleButton fx:id="th_toggle" layoutX="411.0" layoutY="211.0" mnemonicParsing="false" text="OFF" />
+               </children>
+            </Pane>
+            <Pane layoutX="14.0" layoutY="253.0" prefHeight="385.0" prefWidth="263.0">
+               <children>
+                  <Label layoutX="10.0" layoutY="30.0" text="ARM_LR" underline="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="60.0" text="ARM_FB" underline="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="90.0" text="ARM_UD" underline="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="160.0" text="ARM_GPR_RT" underline="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="190.0" text="ARM_GPR_TILT" underline="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="220.0" text="ARM_GPR_OC" underline="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="250.0" text="CLAW_OC" underline="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="ARM_LR" layoutX="160.0" layoutY="30.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="ARM_FB" layoutX="160.0" layoutY="60.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="ARM_UD" layoutX="160.0" layoutY="90.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="ARM_GPR_RT" layoutX="160.0" layoutY="160.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="ARM_GPR_TILT" layoutX="160.0" layoutY="190.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="ARM_GPR_OC" layoutX="160.0" layoutY="220.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="CLAW_OC" layoutX="160.0" layoutY="250.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="320.0" text="CAM_PAN" underline="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="350.0" text="CAM_TILT" underline="true">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="CAM_PAN" layoutX="160.0" layoutY="320.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="CAM_TILT" layoutX="160.0" layoutY="350.0">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="141.0" text="ROBOTIC ARM">
+                     <font>
+                        <Font name="Poor Richard" size="17.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="180.0" layoutY="291.0" text="CAMERA">
+                     <font>
+                        <Font name="Poor Richard" size="17.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane layoutX="855.0" layoutY="17.0" prefHeight="214.0" prefWidth="271.0">
+               <children>
+                  <Label layoutX="10.0" layoutY="40.0" text="Tempearture" underline="true">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="temperature" layoutX="150.0" layoutY="40.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="80.0" text="Pressure" underline="true">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="pressure" layoutX="150.0" layoutY="80.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="120.0" text="Depth" underline="true">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="depth" layoutX="150.0" layoutY="120.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="btnSensorUpdate" layoutX="79.0" layoutY="175.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="142.0" text="Start Update" />
+                  <Separator layoutX="-27.0" layoutY="9.0" orientation="VERTICAL" prefHeight="200.0" />
+                  <Label text="SENSORS">
+                     <font>
+                        <Font name="Poor Richard" size="17.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane layoutX="501.0" layoutY="25.0" prefHeight="191.0" prefWidth="300.0">
+               <children>
+                  <Label fx:id="engine_state" alignment="CENTER" layoutX="57.0" layoutY="8.0" text="Engines" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="comm_state" alignment="CENTER" layoutX="14.0" layoutY="51.0" text="Communication" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Circle fx:id="engine_color" fill="#ff1f1f" layoutX="260.0" layoutY="26.0" radius="11.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle fx:id="comm_color" fill="#ff1f1f" layoutX="260.0" layoutY="68.0" radius="11.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Label fx:id="comm_state1" alignment="CENTER" layoutX="72.0" layoutY="137.0" text="LEDs" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Circle fx:id="led_color" fill="#ff1f1f" layoutX="260.0" layoutY="154.0" radius="11.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Label fx:id="th_state" alignment="CENTER" layoutX="48.0" layoutY="96.0" text="Thrusters" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Circle fx:id="th_color" fill="#ff1f1f" layoutX="260.0" layoutY="113.0" radius="11.0" stroke="BLACK" strokeType="INSIDE" />
+               </children>
+            </Pane>
+            <Pane layoutX="288.0" layoutY="253.0" prefHeight="384.0" prefWidth="533.0">
+               <children>
+                  <Label layoutX="17.0" text="MISSIONS">
+                     <font>
+                        <Font name="Poor Richard" size="17.0" />
+                     </font>
+                  </Label>
+                  <CheckBox layoutX="12.0" layoutY="64.0" mnemonicParsing="false" prefHeight="17.0" text="Insert temperature sensor in vent - 10p" />
+                  <CheckBox layoutX="12.0" layoutY="84.0" mnemonicParsing="false" prefHeight="17.0" text="Measure Temperature - 20p" />
+                  <CheckBox layoutX="12.0" layoutY="104.0" mnemonicParsing="false" text="Ice-crust thickness - 10p" />
+                  <CheckBox layoutX="12.0" layoutY="124.0" mnemonicParsing="false" text="Depth of Ocean - 10p" />
+                  <CheckBox layoutX="12.0" layoutY="144.0" mnemonicParsing="false" text="Retrieve ESP Cable Connector - 5p" />
+                  <CheckBox layoutX="12.0" layoutY="164.0" mnemonicParsing="false" text="Lay ESP cable though 3 waypoints - 15p" />
+                  <CheckBox layoutX="12.0" layoutY="184.0" mnemonicParsing="false" text="Open door on P&amp;C hub - 10p" />
+                  <CheckBox layoutX="12.0" layoutY="204.0" mnemonicParsing="false" text="Insert cable connector in port - 20p" />
+                  <CheckBox layoutX="300.0" layoutY="173.0" mnemonicParsing="false" text="Collect 1 sample of 2 oil mats - 10p" />
+                  <CheckBox layoutX="300.0" layoutY="193.0" mnemonicParsing="false" text="Return samples to surface - 10p" />
+                  <CheckBox layoutX="300.0" layoutY="213.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="210.0" text="Analyze gas chromatograph of each sample - 20p" wrapText="true" />
+                  <CheckBox layoutX="12.0" layoutY="294.0" mnemonicParsing="false" text="Identify serial nos. of 4 CubeSats" />
+                  <CheckBox layoutX="12.0" layoutY="314.0" mnemonicParsing="false" text="Recover 4 CubeSats" />
+                  <Label layoutX="12.0" layoutY="35.0" text="1. Outer Space- Mission to Europa - 100p" underline="true">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="12.0" layoutY="264.0" text="2. Inner Space- M.C.E.R - 40p" underline="true">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="300.0" layoutY="144.0" text="3. Inner Space- F.F- 40p" underline="true">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <CheckBox layoutX="300.0" layoutY="64.0" mnemonicParsing="false" text="Photograph 2 coral colonies - 10p" />
+                  <CheckBox layoutX="300.0" layoutY="84.0" mnemonicParsing="false" text="Compare photos - 10p" />
+                  <CheckBox layoutX="300.0" layoutY="104.0" mnemonicParsing="false" prefWidth="210.0" text="Recover 2 coral samples - 10p" wrapText="true" />
+                  <Label layoutX="300.0" layoutY="35.0" text="4. Inner Space- D.C.S- 30p" underline="true">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <CheckBox layoutX="300.0" layoutY="294.0" mnemonicParsing="false" text="Install flange on wellhead - 10p" />
+                  <CheckBox layoutX="300.0" layoutY="314.0" mnemonicParsing="false" text="Secure flange with 2 bolts - 10p" />
+                  <CheckBox layoutX="300.0" layoutY="334.0" mnemonicParsing="false" prefWidth="210.0" text="Install wellhead cap on flange - 10p" wrapText="true" />
+                  <Label layoutX="300.0" layoutY="265.0" text="5. Inner Space- Rigs to reefs- 50p" underline="true">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <CheckBox layoutX="300.0" layoutY="354.0" mnemonicParsing="false" prefWidth="210.0" text="Secure cap with 4 bolts - 20p" wrapText="true" />
+               </children>
+            </Pane>
+            <Separator layoutX="281.0" layoutY="272.0" orientation="VERTICAL" prefHeight="377.0" prefWidth="5.0" />
+            <ImageView fitHeight="158.0" fitWidth="211.0" layoutX="913.0" layoutY="479.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@ts1.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="msgBoard" alignment="CENTER" layoutX="6.0" layoutY="663.0" prefHeight="17.0" prefWidth="1118.0" textAlignment="CENTER" textFill="#f80505">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Separator layoutX="469.0" layoutY="27.0" orientation="VERTICAL" prefHeight="200.0" />
+            <Separator layoutX="828.0" layoutY="272.0" orientation="VERTICAL" prefHeight="377.0" prefWidth="5.0" />
+            <Pane fx:id="rearView" layoutX="841.0" layoutY="253.0" prefHeight="150.0" prefWidth="150.0" rotate="90.0">
+               <children>
+                  <Circle fill="#f2f2f200" layoutX="75.0" layoutY="75.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle fill="DODGERBLUE" layoutX="75.0" layoutY="75.0" radius="30.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Cylinder drawMode="LINE" height="60.0" layoutX="75.0" layoutY="75.0" radius="7.0" />
+                  <Text layoutX="46.0" layoutY="77.0" rotate="-90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Team Screwdrivers">
+                     <font>
+                        <Font size="7.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+            <Pane fx:id="leftView" layoutX="994.0" layoutY="253.0" prefHeight="150.0" prefWidth="150.0" rotate="-90.0">
+               <children>
+                  <Circle fill="#f2f2f200" layoutX="75.0" layoutY="75.0" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Cylinder height="100.0" layoutX="75.0" layoutY="75.0" radius="15.0" />
+               </children>
+            </Pane>
+            <Label layoutX="884.0" layoutY="403.0" text="REAR VIEW" underline="true">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="1024.0" layoutY="403.0" text="LEFT SIDE VIEW" underline="true">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </center>
+   <left>
+      <Pane prefHeight="659.0" prefWidth="10.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER" />
+   </left>
+   <right>
+      <Pane prefHeight="177.0" prefWidth="10.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER" />
+   </right>
+   <bottom>
+      <Pane prefHeight="10.0" prefWidth="1200.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER" />
+   </bottom>
+   <top>
+      <AnchorPane prefHeight="24.0" prefWidth="660.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar prefHeight="25.0" prefWidth="660.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <menus>
+                  <Menu fx:id="manuBar" mnemonicParsing="false" text="Configurations">
+                     <items>
+                        <MenuItem fx:id="menuRediscover" mnemonicParsing="false" text="Re-Discover Controllers" />
+                        <MenuItem fx:id="menuControllerConfig" mnemonicParsing="false" text="Configure Controllers" />
+                        <MenuItem fx:id="menuQuit" mnemonicParsing="false" text="Quit" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Engines">
+                     <items>
+                        <MenuItem fx:id="menuStartEngines" mnemonicParsing="false" text="Start Engines!" />
+                        <MenuItem fx:id="menuStopEngines" mnemonicParsing="false" text="Stop Engines" />
+                     </items>
+                  </Menu>
+               </menus>
+            </MenuBar>
+         </children>
+      </AnchorPane>
+   </top>
+</BorderPane>
