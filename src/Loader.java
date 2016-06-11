@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,20 +29,15 @@ public class Loader extends Application{
 		Parent root;
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(this.getClass().getResource("TestControllerGUI4.fxml"));
+			loader.setLocation(this.getClass().getResource("ControllerGUI.fxml"));
 			root = loader.load();
-			primaryStage.setScene(new Scene(root));
-			primaryStage.show();
+			primaryStage.setScene(new Scene(root, 900, 600));
+			primaryStage.show();            
             ControllerGUI controllerGUI = loader.getController();
-            controllerGUI.init(primaryStage);
+            controllerGUI.init();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	@Override
-	public void stop() throws Exception {
-		super.stop();
-		Platform.exit();
-	}
 }

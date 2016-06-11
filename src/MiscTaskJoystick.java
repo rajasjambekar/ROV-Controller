@@ -23,6 +23,7 @@ public class MiscTaskJoystick implements Runnable{
 	private int noLed = 2;				//number of leds
 	private int[] cam1Servo;	//servos for camera1	- pan,tilt
 	private int[] cam2Servo;	//servos for camera2	- pan,tilt
+	private int servoAngleJump = 10;	//jump 10degrees for change in servo angle
 	private long c1s1LTimer;	//timers to check time since last command
 	private long c1s1RTimer;
 	private long c1s2LTimer;
@@ -38,7 +39,6 @@ public class MiscTaskJoystick implements Runnable{
 	private int minServoAngle = 0;		//minimum angle of servo
 	private int defaultServoAngle = 90;		//minimum angle of servo
 	private int maxServoAngle = 180;		//minimum angle of servo
-	private int servoAngleJump = 10;	//jump 10degrees for change in servo angle
 	
 	public MiscTaskJoystick(JoystickContainer jC, Socket client, ThreadEnable threadEnable, DataAccumulator dataStore) {
 		this.jC = jC;
@@ -74,11 +74,11 @@ public class MiscTaskJoystick implements Runnable{
 		//Stop thread from executing if controller gets disconnected
 		//check if tcp is connected
 		//Stop thread from executing if tcp gets disconnected
-		while(threadEnable.getThreadState() && threadEnable.getTcpState()) {
+		while(threadEnable.getThreadState() && threadEnable.getTcpState() && jC.getPoll()) {
 			setVal();
 			updateDataAccumulator();
-			//dataStore.dispServoValues();
-			//dataStore.dispLed();
+			dataStore.dispServoValues();
+			dataStore.dispLed();
 			sleep(10);
 		}
 		//send stop values to arduino immediately
@@ -86,8 +86,8 @@ public class MiscTaskJoystick implements Runnable{
 		sendStopVal();
 		//update values in dataAccumulator one last time
 		updateDataAccumulator();
-		//dataStore.dispServoValues();
-		//dataStore.dispLed();
+		dataStore.dispServoValues();
+		dataStore.dispLed();
 	}
 	
 	//updates the values on object of DataAccumulator
@@ -102,7 +102,7 @@ public class MiscTaskJoystick implements Runnable{
 	//gets the input from 
 	private void setVal() {
 		//get raw axes data
-		double axesValPercent[] = new double[jC.getAxisCount()];
+		float axesValPercent[] = new float[jC.getAxisCount()];
 		jC.getAxesData(axesValPercent);
 		
 		//check all axisTasks
@@ -149,7 +149,7 @@ public class MiscTaskJoystick implements Runnable{
 	}
 	
 	//categorizes the task by taskname and direction and checks time since last check
-	private void calVal(String taskName, double newVal, int code) {
+	private void calVal(String taskName, float newVal, int code) {
 		if(taskName.equalsIgnoreCase("C1S1_LEFT") && System.currentTimeMillis()-c1s1LTimer>timeGap) {
 			int dir = 1;
 			setCamServoVal(1, 0, newVal, code, dir);
@@ -199,7 +199,7 @@ public class MiscTaskJoystick implements Runnable{
 	}
 	
 	//sets the new value for led
-	private void setLedVal(int ledNo, double newVal, int code) {
+	private void setLedVal(int ledNo, float newVal, int code) {
 		if(ledNo<=noLed) {
 			//-1 is set as button not pressed value in setVal
 			//50 is the value when joystick is at rest
@@ -212,6 +212,7 @@ public class MiscTaskJoystick implements Runnable{
 				else if(led1ZeroValTracker){
 					led1ZeroValTracker = false;
 					ledArray1 = !ledArray1;
+					System.out.println("1");
 					if(ledArray1) {
 						tcpSender.sendData(code, 1);
 					}
@@ -228,6 +229,7 @@ public class MiscTaskJoystick implements Runnable{
 				else if(led2ZeroValTracker){
 					led2ZeroValTracker = false;
 					ledArray2 = !ledArray2;
+					System.out.println("2");
 					if(ledArray2) {
 						tcpSender.sendData(code, 1);
 					}
@@ -240,7 +242,7 @@ public class MiscTaskJoystick implements Runnable{
 	}
 
 	//rounds off newVal by subtracting last digit
-	private void setCamServoVal(int camNo, int servoNo, double newVal, int code, int dir) {
+	private void setCamServoVal(int camNo, int servoNo, float newVal, int code, int dir) {
 		//will be -1/-2 if button triggered task
 		if(newVal>=0) {
 			//convert % to angle

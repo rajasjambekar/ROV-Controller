@@ -14,9 +14,9 @@ public class JoystickContainer {
 	private int axesCount = 0;
 	private int buttonCount = 0;
 	private int hatSwitchCount = 0;
-	private double axes[] = null;
+	private float axes[] = null;
 	private boolean buttons[] = null;
-	private double hatSwitches[] = null;
+	private float hatSwitches[] = null;
 	private Controller joystick = null;
 	//component list maps each axis and button to physical axis and button on the joystick for 
 	//quick access to object while reading value
@@ -29,9 +29,9 @@ public class JoystickContainer {
 		discoverAxisCount();
 		discoverButtonCount();
 		discoverHatSwitchCount();
-		axes = new double[getAxisCount()];
+		axes = new float[getAxisCount()];
 		buttons = new boolean[getButtonCount()];
-		hatSwitches = new double[getHatSwitchCount()];
+		hatSwitches = new float[getHatSwitchCount()];
 		buttonComponentList = new ArrayList<Component>();
 		axesComponentList = new ArrayList<Component>();
 		hatSwitchComponentList = new ArrayList<Component>();
@@ -55,12 +55,11 @@ public class JoystickContainer {
 		//check if joystick is still connected before reading value
 		for(int i=0;i<axesComponentList.size() && getPoll();i++) {
 			//read data while chance of disconnection is least
-			double axisValue = axesComponentList.get(i).getPollData();
+			float axisValue = axesComponentList.get(i).getPollData();
 			//convert axisValue to percentage
-			double axisValueInPercentage = getAxisValueInPercentage(axisValue);
+			float axisValueInPercentage = getAxisValueInPercentage(axisValue);
 			//round off boundary values around 5%
 			axisValueInPercentage = roundOffValInPercentage(axisValueInPercentage);
-			//System.out.println(axisValueInPercentage);
 			//check type of axis and store its data
 			Identifier axisIdentifier = axesComponentList.get(i).getIdentifier();
 			if(axisIdentifier == Component.Identifier.Axis.X) {
@@ -94,8 +93,8 @@ public class JoystickContainer {
 		//check if joystick is still connected before reading value
 		for(int i=0;i<hatSwitchComponentList.size() && getPoll();i++) {
 			//read data while chance of disconnection is least
-			double hatSwitchValue = hatSwitchComponentList.get(i).getPollData();
-			double hatSwitchInPercentage = getAxisValueInPercentage(hatSwitchValue);
+			float hatSwitchValue = hatSwitchComponentList.get(i).getPollData();
+			float hatSwitchInPercentage = getAxisValueInPercentage(hatSwitchValue);
 			this.hatSwitches[i] = hatSwitchInPercentage;
 		}
 	}
@@ -244,7 +243,7 @@ public class JoystickContainer {
 	//copies data from axes to supplied object
 	//no need to return axesData
 	//reference of axes object not to be given for security
-	public synchronized void getAxesData(double axesData[]) {
+	public synchronized void getAxesData(float axesData[]) {
 		for(int i=0; i<axes.length && i<axesData.length; i++) {
 			axesData[i] = axes[i];
 		}
@@ -271,18 +270,18 @@ public class JoystickContainer {
 	}
 	
 	//round off values near boundaries to prevent accidental thruster movement
-	private double roundOffValInPercentage(double axisValueInPercentage) {
+	private float roundOffValInPercentage(float axisValueInPercentage) {
 		//lower boundary
-		if(axisValueInPercentage<=5)
+		if(axisValueInPercentage<=10)
 			axisValueInPercentage = 0;
 		//central boundary
 		else if((axisValueInPercentage<=50 && axisValueInPercentage>=45) || ((axisValueInPercentage>=50 && axisValueInPercentage<=55)))
 			axisValueInPercentage = 50;
 		//higher boundary
-		else if(axisValueInPercentage>=95)
+		else if(axisValueInPercentage>=90)
 			axisValueInPercentage = 100;
 		else {
-			//axisValueInPercentage -= axisValueInPercentage%10;
+			axisValueInPercentage -= axisValueInPercentage%10;
 		}
 		return axisValueInPercentage;
 	}
@@ -295,7 +294,7 @@ public class JoystickContainer {
 	 * 
 	 * @return value of axis in percentage.
 	 */
-	public double getAxisValueInPercentage(double axisValue)
+	public float getAxisValueInPercentage(float axisValue)
 	{
 		return ((((joystickMaxVal-joystickMinVal) - (joystickMaxVal - axisValue)) * 100) / 2);
 	}

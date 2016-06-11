@@ -427,7 +427,6 @@ public class ConfigurationUI {
     	Label comp=null;
     	//get list of labels to change
     	int i=0;
-    	//match the pressed button with item in list of buttons
     	for(i=0; i<setControllerButtonList.length; i++) {
     		if(setControllerButtonList[i]==source) {
     			name=controllerLabelList[i];
@@ -438,9 +437,7 @@ public class ConfigurationUI {
 		String keys[] = new String[connectedControllers.size()];
 		connectedControllers.keySet().toArray(keys);
 		for(String key:keys) {
-			//find the selected controller from the list of controllers on UI
 			if(controllerChooser.getValue().toString().equals(key.toString())) {
-				//get name of component from selected component
     			String compName = getComponent(connectedControllers.get(key));
 				if(compName!="") {
 					//check if this button has been attached as toggle button previously
@@ -450,14 +447,8 @@ public class ConfigurationUI {
 						break;
 					}
 					else if(compName.contains("AXIS")) {
-						//set the controller name and component name for selected control
 						name.setText(controllerChooser.getValue().toString());
 						comp.setText(compName);
-						//change the component name for paired control
-						if(compName.startsWith("-"))
-							compName = compName.substring(1);
-						else 
-							compName = "-" + compName;
 						//force combinations on opposite movements of same system
 						//eg. left-right, up-down, etc
 						if(i%2==0) {
@@ -501,7 +492,7 @@ public class ConfigurationUI {
         		}
         		else if(controllerComponents[i].isAnalog()){
     				//Component is an axis
-    				if(controllerComponents[i].getPollData()== 1.0f) {
+    				if(controllerComponents[i].getPollData()== 1.0f || controllerComponents[i].getPollData()== -1.0f) {
     					if(componentIdentifier == Component.Identifier.Axis.X) {
         					return ("AXIS" + (0));
     					}
@@ -510,17 +501,6 @@ public class ConfigurationUI {
     					}
     					else if(componentIdentifier == Component.Identifier.Axis.Z) {
     						return ("AXIS" + (2));
-    					}
-    				}
-    				else if(controllerComponents[i].getPollData()== -1.0f) {
-    					if(componentIdentifier == Component.Identifier.Axis.X) {
-        					return ("-AXIS" + (0));
-    					}
-    					else if(componentIdentifier == Component.Identifier.Axis.Y) {
-    						return ("-AXIS" + (1));
-    					}
-    					else if(componentIdentifier == Component.Identifier.Axis.Z) {
-    						return ("-AXIS" + (2));
     					}
     				}
     			}
