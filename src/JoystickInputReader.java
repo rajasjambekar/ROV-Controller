@@ -23,6 +23,9 @@ public class JoystickInputReader implements Runnable {
 		this.dataStore = dataStore;
 		this.client = client;
 		this.threadEnable = threadEnable;
+		if(jContainer.getPoll()) {
+			threadEnable.setJoystickDisconnectedState(false);
+		}
 		checkTasks();
 	}
 	
@@ -54,7 +57,10 @@ public class JoystickInputReader implements Runnable {
 			jContainer.readAxes();
 			jContainer.readButtons();
 			//jContainer.dispValues();
-			//sleep(100);
+			sleep(5);
+		}
+		if(!jContainer.getPoll()) {
+			threadEnable.setJoystickDisconnectedState(true);
 		}
 	}
 

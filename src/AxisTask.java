@@ -12,13 +12,15 @@ public class AxisTask {
 	private int code;
 	private int axisNumber;  //x - 0, y - 1, z - 2
 	private int toggleButton = 0;
+	private float axisSide = 1f; //axis has two sides 1f and -1f
 	
-	public AxisTask(String taskName, String taskType, int  code, int axisNumber, int toggleButton) {
+	public AxisTask(String taskName, String taskType, int  code, int axisNumber, int toggleButton, float side) {
 		this.taskName = taskName;  //name of task for user reference
 		this.taskType = taskType;  //type of task for user reference
 		this.code = code;   // Code used by arduino to identify component connected to arduino
 		this.axisNumber = axisNumber; //button number of the joystick holding object of this class
 		this.toggleButton = toggleButton;
+		this.axisSide = side;
 	}
 	
 	//check if this task requires press of toggle button
@@ -48,6 +50,10 @@ public class AxisTask {
 		this.toggleButton = toggleButtonNumber;
 	}
 	
+	public void setAxisSide(float side) {
+		this.axisSide = side;
+	}
+	
 	public int getAxisNumber() {
 		return axisNumber;
 	}
@@ -67,5 +73,9 @@ public class AxisTask {
 	
 	public String getTaskType() {
 		return taskType;
+	}
+	
+	public float getAxisSide() {
+		return axisSide;
 	}
 }

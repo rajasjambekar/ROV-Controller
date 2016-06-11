@@ -17,6 +17,9 @@ public class ManeuveringJoystick implements Runnable{
 	private TCPSender tcpSender;
 	private ThreadEnable threadEnable;
 	private DataAccumulator dataStore;
+	private long repeatTimeGapMillis = 5000;
+	private long minTimeGapMillis = 300;
+	private long prevTimeMillis[];
 	
 	public ManeuveringJoystick(JoystickContainer jC, Socket client, ThreadEnable threadEnable, DataAccumulator dataStore) {
 		this.jC = jC;
@@ -32,6 +35,9 @@ public class ManeuveringJoystick implements Runnable{
 		thrusterValRange = THRUSTER_FULL_FW-THRUSTER_FULL_BW;
 		//set all thrusters with stop val
 		stopThrusters();
+		
+		prevTimeMillis = new long[numThrusters];
+		setCurrentTime();
 	}
 
 	@Override
@@ -41,15 +47,19 @@ public class ManeuveringJoystick implements Runnable{
 		//check if tcp is connected
 		//Stop thread from executing if tcp gets disconnected
 		//Also keep checking if controller contains task to maneuver rov
-		while(threadEnable.getThreadState() && threadEnable.getTcpState() && jC.getPoll()) {
-			setThrusterVal();
-			updateDataAccumulator();
-			dataStore.dispThrusterValues();
+		while(threadEnable.getThreadState() && threadEnable.getTcpState()) {
+			//check if thrusters are enabled by the user using the UI
+			if(threadEnable.getThrusterEnableState()) {
+				setThrusterVal();
+				updateDataAccumulator();
+				//dataStore.dispThrusterValues();
+			}
 			sleep(10);
 		}
 		//send stop values to arduino immediately
 		System.out.println("Stopping Thrusters");
 		sendStopVal();
+		setCurrentTime();
 		//update values in dataAccumulator one last time
 		updateDataAccumulator();
 		dataStore.dispThrusterValues();
@@ -63,9 +73,8 @@ public class ManeuveringJoystick implements Runnable{
 	//gets the relevant axes data and calculates the corresponding thruster data
 	public void setThrusterVal() {
 		//get raw axes data
-		float axesValPercent[] = new float[jC.getAxisCount()];
+		double axesValPercent[] = new double[jC.getAxisCount()];
 		jC.getAxesData(axesValPercent);
-		
 		//update values for all tasks of type maneuver
 		//check all axisTasks
 		ArrayList<AxisTask> axisTaskList = jC.getAxisTaskList();
@@ -76,7 +85,7 @@ public class ManeuveringJoystick implements Runnable{
 					//task triggered by toggle button
 					if(jC.getToggleButtonState(task)) {
 						//toggle button is pressed
-						calVal(task.getTaskName(), axesValPercent[task.getAxisNumber()], task.getCode());
+						calVal(task.getTaskName(), axesValPercent[task.getAxisNumber()], task.getCode(), task.getAxisSide());
 					}
 					else {
 						//toggle button is not pressed
@@ -86,14 +95,14 @@ public class ManeuveringJoystick implements Runnable{
 					//if toggle button is pressed for this axis do not read value
 					if(!jC.checkAxisToggleButtonPressed(task.getAxisNumber()))
 						//task not triggered by toggle button
-						calVal(task.getTaskName(), axesValPercent[task.getAxisNumber()], task.getCode());
+						calVal(task.getTaskName(), axesValPercent[task.getAxisNumber()], task.getCode(), task.getAxisSide());
 				}
 			}
 		}
 		
 		//get all button values
 		boolean buttonVal[] = new boolean[jC.getButtonCount()];
-		
+		jC.getButtonsData(buttonVal);
 		//check all buttonTasks 
 		ArrayList<ButtonTask> buttonTaskList = jC.getButtonTaskList();
 		for(int i=0;i<buttonTaskList.size();i++) {
@@ -103,7 +112,7 @@ public class ManeuveringJoystick implements Runnable{
 				//check if button pressed
 				if(buttonVal[task.getButtonNumber()-1])
 					val = -2;		//button pressed value
-				calVal(task.getTaskName(), val, task.getCode());
+				calVal(task.getTaskName(), val, task.getCode(), 0);
 			}
 		}
 	}
@@ -114,77 +123,174 @@ public class ManeuveringJoystick implements Runnable{
 	//code value is combination of 2 thruster codes each 2 digit thus making 4 digit code
 	//This code is common for buttons and axis
 	//In case of buttons, the value of axisVal is 1/0. 
-	private void calVal(String taskName, float axisVal, int code) {
-		if(taskName.equalsIgnoreCase("TH_LR1")) {
+	private void calVal(String taskName, double axisVal, int code, float axisSide) {
+		if(taskName.equalsIgnoreCase("TH_LT") || taskName.equalsIgnoreCase("TH_RT")) {
 			int dir = 1;
-			int pos = 0;
-			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
+			if(taskName.equalsIgnoreCase("TH_RT"))
+				dir = -1;
+			
+			int thPos1 = 0;
+			int thPos2 = 1;
+			
+			//set axisVal in case thrusters triggered by buttons
+			if(axisVal==-2 && taskName.equalsIgnoreCase("TH_LT"))
+				axisVal = 95;	//forward
+			else if(axisVal==-2 && taskName.equalsIgnoreCase("TH_RT"))
+				axisVal = 5;	//reverse
+			else if(axisVal==-1)
+				axisVal = 50;	//stop
+			
+			//call function only when axisSide for task corresponds with current value of 
+			//axis
+			//or call function if task is buttonTask
+			if((axisSide<0 && axisVal<=50 && ((thrusterVal[thPos1]<=THRUSTER_STOP && thrusterVal[thPos2]<=THRUSTER_STOP) || ((thrusterVal[thPos1]>=THRUSTER_STOP && thrusterVal[thPos2]>=THRUSTER_STOP)))) || (axisSide>0 && axisVal>=50 && ((thrusterVal[thPos1]<=THRUSTER_STOP && thrusterVal[thPos2]<=THRUSTER_STOP) || ((thrusterVal[thPos1]>=THRUSTER_STOP && thrusterVal[thPos2]>=THRUSTER_STOP))))) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, dir, thPos2);
+			}
+			//in case of buttonTask check if previous thruster value corresponds to task name
+			//This is to prevent one task from resetting value set by paired task when button
+			//not pressed
+			else if(axisSide==0 && thrusterVal[thPos1]==thrusterVal[thPos2] && thrusterVal[thPos1]>=THRUSTER_STOP && taskName.equalsIgnoreCase("TH_LT")) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, dir, thPos2);
+			}
+			else if(axisSide==0 && thrusterVal[thPos1]==thrusterVal[thPos2] && thrusterVal[thPos1]<=THRUSTER_STOP && taskName.equalsIgnoreCase("TH_RT")) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, dir, thPos2);
+			}
 		}
-		else if(taskName.equalsIgnoreCase("TH_LR2")) {
+		else if(taskName.equalsIgnoreCase("TH_FW") || taskName.equalsIgnoreCase("TH_BW")) {
 			int dir = 1;
-			int pos = 1;
-			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
+			if(taskName.equalsIgnoreCase("TH_BW"))
+				dir = -1;
+			
+			int thPos1 = 2;
+			int thPos2 = 3;
+			
+			//set axisVal in case thrusters triggered by buttons
+			if(axisVal==-2 && taskName.equalsIgnoreCase("TH_FW"))
+				axisVal = 95;	//forward
+			else if(axisVal==-2 && taskName.equalsIgnoreCase("TH_BW"))
+				axisVal = 5;	//reverse
+			else if(axisVal==-1)
+				axisVal = 50;	//stop
+			
+			//call function only when axisSide for task corresponds with current value of 
+			//axis
+			//or call function if task is buttonTask
+			if(axisSide<0 && axisVal<=50 || (axisSide>0 && axisVal>=50)) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, dir, thPos2);
+			}
+			//in case of buttonTask check if previous thruster value corresponds to task name
+			//This is to prevent one task from resetting value set by paired task when button
+			//not pressed
+			else if(axisSide==0 && thrusterVal[thPos1]>=THRUSTER_STOP && taskName.equalsIgnoreCase("TH_FW")) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, dir, thPos2);
+			}
+			else if(axisSide==0 && thrusterVal[thPos1]<=THRUSTER_STOP && taskName.equalsIgnoreCase("TH_BW")) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, dir, thPos2);
+			}
 		}
-		else if(taskName.equalsIgnoreCase("TH_FB1")) {
+		else if(taskName.equalsIgnoreCase("TH_UP") || (taskName.equalsIgnoreCase("TH_DN"))) {
 			int dir = 1;
-			int pos = 2;
-			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
+			if(taskName.equalsIgnoreCase("TH_UP"))
+				dir = -1;
+			
+			int thPos1 = 4;
+			int thPos2 = 5;
+			
+			//set axisVal in case thrusters triggered by buttons
+			if(axisVal==-2 && taskName.equalsIgnoreCase("TH_DN"))
+				axisVal = 95;	//forward
+			else if(axisVal==-2 && taskName.equalsIgnoreCase("TH_UP"))
+				axisVal = 5;	//reverse
+			else if(axisVal==-1)
+				axisVal = 50;	//stop
+			
+			//call function only when axisSide for task corresponds with current value of 
+			//axis
+			//or call function if task is buttonTask
+			if(axisSide<0 && axisVal<=50 || (axisSide>0 && axisVal>=50)) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, dir, thPos2);
+			}
+			//in case of buttonTask check if previous thruster value corresponds to task name
+			//This is to prevent one task from resetting value set by paired task when button
+			//not pressed
+			else if(axisSide==0 && thrusterVal[thPos1]>=THRUSTER_STOP && taskName.equalsIgnoreCase("TH_DN")) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, dir, thPos2);
+			}
+			else if(axisSide==0 && thrusterVal[thPos1]<=THRUSTER_STOP && taskName.equalsIgnoreCase("TH_UP")) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, dir, thPos2);
+			}
 		}
-		else if(taskName.equalsIgnoreCase("TH_FB2")) {
+		else if(taskName.equalsIgnoreCase("TH_RTL") || (taskName.equalsIgnoreCase("TH_RTR"))) {
 			int dir = 1;
-			int pos = 3;
-			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
-		}
-		else if(taskName.equalsIgnoreCase("TH_UD1")) {
-			int dir = 1;
-			int pos = 4;
-			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
-		}
-		else if(taskName.equalsIgnoreCase("TH_UD2")) {
-			int dir = 1;
-			int pos = 5;
-			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
-		}
-		else if(taskName.equalsIgnoreCase("TH_RT1")) {
-			int dir = 1;
-			int pos = 0;
-			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
-		}
-		else if(taskName.equalsIgnoreCase("TH_RT2")) {
-			int dir = -1;
-			int pos = 1;
-			setThrusterVal(thrusterVal[pos], axisVal, code, dir, pos);
+			if(taskName.equalsIgnoreCase("TH_RTR"))
+				dir = -1;
+			
+			int thPos1 = 0;
+			int thPos2 = 1;
+			
+			//set axisVal in case thrusters triggered by buttons
+			if(axisVal==-2 && taskName.equalsIgnoreCase("TH_RTL"))
+				axisVal = 95;	//forward
+			else if(axisVal==-2 && taskName.equalsIgnoreCase("TH_RTR"))
+				axisVal = 5;	//reverse
+			else if(axisVal==-1)
+				axisVal = 50;	//stop
+			//call function only when axisSide for task corresponds with current value of 
+			//axis
+			//or call function if task is buttonTask
+			if((axisSide<0 && axisVal<=50 && ((thrusterVal[thPos1]<=THRUSTER_STOP && thrusterVal[thPos2]>=THRUSTER_STOP) || ((thrusterVal[thPos1]>=THRUSTER_STOP && thrusterVal[thPos2]<=THRUSTER_STOP)))) || ((axisSide>0 && axisVal>=50) && ((thrusterVal[thPos1]<=THRUSTER_STOP && thrusterVal[thPos2]>=THRUSTER_STOP) || ((thrusterVal[thPos1]>=THRUSTER_STOP && thrusterVal[thPos2]<=THRUSTER_STOP))))) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, -dir, thPos2);
+			}
+			//in case of buttonTask check if previous thruster value corresponds to task name
+			//This is to prevent one task from resetting value set by paired task when button
+			//not pressed
+			else if(axisSide==0 && ((thrusterVal[thPos1]==thrusterVal[thPos2] && thrusterVal[thPos1]==THRUSTER_STOP) || (thrusterVal[thPos1]!=thrusterVal[thPos2] && thrusterVal[thPos1]>THRUSTER_STOP)) && taskName.equalsIgnoreCase("TH_RTL")) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, -dir, thPos2);
+			}
+			else if(axisSide==0 && ((thrusterVal[thPos1]==thrusterVal[thPos2] && thrusterVal[thPos1]==THRUSTER_STOP) || (thrusterVal[thPos1]!=thrusterVal[thPos2] && thrusterVal[thPos1]<THRUSTER_STOP)) && taskName.equalsIgnoreCase("TH_RTR")) {
+				setThrusterVal(thrusterVal[thPos1], axisVal, (code/100)*100, dir, thPos1);
+				setThrusterVal(thrusterVal[thPos2], axisVal, (code%100)*100, -dir, thPos2);
+			}
 		}
 	}
 	
-	private void setThrusterVal(int prevVal, float axisVal, int code, int dir, int pos) {
-		//convert button press val to appropriate val
-		if(axisVal==-2)	//Button pressed. Thruster on
-			axisVal = 90;	//buttons are on off. So do not power thrusters to 100%
-		else if(axisVal==-1)	//button not pressed. Thruster off
-			axisVal = 50;
-		
+	private void setThrusterVal(int prevVal, double axisVal, int code, int dir, int pos) {
 		int t = 0;
-		if(dir==1)
-			//normal thrusters
-			t = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
-		else
-			//rotation thruster.
-			//one thruster fw and other reverse
-			t = THRUSTER_FULL_BW + (int) ((axisVal/100)*(thrusterValRange));
+		//forward direction of thruster is paired with -1f on axis. 
+		//reverse direction of thruster is paired with 1f on axis. 
+		//reverse axisVal to get correct thruster value
+		if((dir==1 && axisVal<50) || (dir==-1 && axisVal>50)) {
+			axisVal = 100 - axisVal;
+		}
+		
+		//forward movement of thruster
+		//t = THRUSTER_FULL_FW - (int) ((axisVal/100)*(thrusterValRange));
+		t = THRUSTER_FULL_BW + (int) ((axisVal/100)*(thrusterValRange));
 		//check for change in thruster value
-		if(compareThrusterVal(thrusterVal[1], t)) {
+		//if no change but min time elapsed resend data
+		if(((compareThrusterVal(thrusterVal[pos], t) || (System.currentTimeMillis() - prevTimeMillis[pos])>repeatTimeGapMillis)) && (System.currentTimeMillis() - prevTimeMillis[pos])>minTimeGapMillis) {
 			//round off thruster values between 1600 and 1400 to 1500
-			if(t<1600 && t>1400)	//
-				t = THRUSTER_STOP;
 			thrusterVal[pos] = t;	//assign new thruster value
+			//System.out.println(t);
 			tcpSender.sendData(code, t);	//send new thruster value over tcp
+			prevTimeMillis[pos] = System.currentTimeMillis();
 		}
 	}
 	
 	//check if there is a change in thruster value
 	private boolean compareThrusterVal(int prevVal, int newVal) {
-		int limit = 50;	//gap is ideal to get discrete values
+		int limit = 10;	//gap is ideal to get discrete values
 		if((newVal>prevVal && newVal-prevVal>limit) || (newVal<prevVal && prevVal-newVal>limit)) {
 			//thruster value changed
 			return true;
@@ -225,7 +331,7 @@ public class ManeuveringJoystick implements Runnable{
 		for(AxisTask task: axisTaskList) {
 			if(task.getTaskType().equalsIgnoreCase("Maneuver")) {
 				int code = task.getCode();
-				//tcpSender.sendData(code, THRUSTER_STOP);
+				tcpSender.sendData(code, THRUSTER_STOP);
 				sleep(10);
 			}
 		}
@@ -237,5 +343,11 @@ public class ManeuveringJoystick implements Runnable{
 				sleep(10);
 			}
 		}
+	}
+	
+	//set current time for all thrusters
+	private void setCurrentTime() {
+		for(int i=0;i<prevTimeMillis.length;i++)
+			prevTimeMillis[i] = System.currentTimeMillis();
 	}
 }

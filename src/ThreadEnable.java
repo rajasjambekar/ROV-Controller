@@ -6,11 +6,15 @@
  */
 public class ThreadEnable {
 	private boolean threadOn;
+	private boolean joystickDisconnected;
 	private boolean tcpConnected;
+	private boolean thrusterEnable;
 	
 	public ThreadEnable() {
 		threadOn = false;
 		tcpConnected = false;
+		joystickDisconnected = false;
+		thrusterEnable = false;
 	}
 	
 	public void setThreadState(boolean state) {
@@ -21,11 +25,27 @@ public class ThreadEnable {
 		tcpConnected = state;
 	}
 	
+	public void setJoystickDisconnectedState(boolean state) {
+		joystickDisconnected = state;
+	}
+	
+	public void setThrusterEnableState(boolean state) {
+		thrusterEnable = state;
+	}
+	
 	public boolean getThreadState() {
 		return threadOn;
 	}
 	
 	public boolean getTcpState() {
 		return tcpConnected;
+	}
+	
+	public boolean getJoystickDisconnectedState() {
+		return joystickDisconnected;
+	}
+	
+	public boolean getThrusterEnableState() {
+		return thrusterEnable;
 	}
 }
